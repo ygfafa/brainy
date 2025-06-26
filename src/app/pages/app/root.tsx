@@ -1,7 +1,7 @@
-import { Outlet } from "react-router";
+import { Outlet } from 'react-router'
 
 const AppRoot = () => {
-  return <Outlet />;
-};
+  return <Outlet />
+}
 
-export default AppRoot;
+export default AppRoot

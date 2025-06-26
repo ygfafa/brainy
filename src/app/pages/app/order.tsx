@@ -1,5 +1,5 @@
 const OrderRoute = () => {
-  return <div>주문하기</div>;
-};
+  return <div>주문하기</div>
+}
 
-export default OrderRoute;
+export default OrderRoute
