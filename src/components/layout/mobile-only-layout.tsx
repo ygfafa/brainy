@@ -11,10 +11,7 @@ type MainLayoutProps = {
 export const MobileOnlyLayout = ({ className, style, children, ...props }: MainLayoutProps) => {
   return (
     <main
-      className={cn(
-        'mx-auto h-full shadow-[inset_-1px_0_0_rgba(0,0,0,0.1),inset_1px_0_0_rgba(0,0,0,0.1)]',
-        className,
-      )}
+      className={cn('mx-auto h-full', className)}
       style={{
         maxWidth: MAX_MOBILE_SCREEN_WIDTH,
         ...style,
