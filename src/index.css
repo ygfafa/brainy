@@ -80,7 +80,13 @@
   * {
     @apply border-border outline-ring/50;
   }
+  html {
+    @apply h-full w-full;
+  }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground h-full w-full;
+  }
+  #root {
+    @apply h-full w-full;
   }
 }

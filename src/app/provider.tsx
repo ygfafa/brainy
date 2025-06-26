@@ -7,6 +7,7 @@ import { HelmetProvider } from "react-helmet-async";
 import { Spinner } from "@/components/ui/spinner";
 import { queryConfig } from "@/lib/react-query";
 import { Toaster } from "sonner";
+import { MobileOnlyLayout } from "@/components/layout/mobile-only-layout";
 
 type AppProviderProps = {
   children: React.ReactNode;
@@ -33,7 +34,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
           <QueryClientProvider client={queryClient}>
             {import.meta.env.DEV && <ReactQueryDevtools />}
             <Toaster position="bottom-center" richColors expand />
-            <div>{children}</div>
+            <MobileOnlyLayout>{children}</MobileOnlyLayout>
           </QueryClientProvider>
         </HelmetProvider>
       </ErrorBoundary>
