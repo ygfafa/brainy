@@ -11,7 +11,8 @@ const WatchPage = () => {
   const playerRef = useRef<YouTubePlayerRef>(null)
   const [playerState, setPlayerState] = useState(-1)
 
-  const { setSubtitles, setPlayerRef, setCurrentTime, subtitles, currentIndex } = useSubtitleStore()
+  const { setSubtitles, setPlayerRef, setCurrentTime, subtitles, currentIndex, showTranslation } =
+    useSubtitleStore()
 
   // 비디오 ID에 맞는 자막 로드
   useEffect(() => {
@@ -56,7 +57,9 @@ const WatchPage = () => {
         {currentSubtitle && (
           <div className="bg-gray-50 rounded-lg p-4 mb-4">
             <p className="text-lg font-medium mb-2">{currentSubtitle.text}</p>
-            <p className="text-sm text-gray-600">{currentSubtitle.translation}</p>
+            {showTranslation && (
+              <p className="text-sm text-gray-600">{currentSubtitle.translation}</p>
+            )}
           </div>
         )}
         <p className="text-xs text-gray-500">

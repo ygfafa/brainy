@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight, Pause, Play } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Languages, Pause, Play } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 import { useSubtitleStore } from '@/stores/subtitle-store'
@@ -9,12 +9,19 @@ type VideoControlsProps = {
   playerRef: React.RefObject<YouTubePlayerRef | null>
 }
 
+const formatTime = (seconds: number) => {
+  const mins = Math.floor(seconds / 60)
+  const secs = Math.floor(seconds % 60)
+  return `${mins}:${secs.toString().padStart(2, '0')}`
+}
+
 export const VideoControls = ({ playerRef }: VideoControlsProps) => {
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentTime, setCurrentTime] = useState(0)
   const [duration, setDuration] = useState(0)
 
-  const { currentIndex, subtitles, nextSubtitle, prevSubtitle } = useSubtitleStore()
+  const { currentIndex, subtitles, nextSubtitle, prevSubtitle, showTranslation, toggleTranslation } =
+    useSubtitleStore()
 
   const hasPrevSubtitle = currentIndex > 0
   const hasNextSubtitle = currentIndex < subtitles.length - 1
@@ -126,6 +133,26 @@ export const VideoControls = ({ playerRef }: VideoControlsProps) => {
             >
               <ChevronRight className="w-5 h-5" />
             </button>
+          </div>
+
+          <div className="flex items-center gap-3">
+            {/* 번역 토글 버튼 */}
+            <button
+              onClick={toggleTranslation}
+              className={`p-2 rounded-full transition-colors ${
+                showTranslation
+                  ? 'bg-blue-100 text-blue-600 hover:bg-blue-200'
+                  : 'bg-gray-100 text-gray-400 hover:bg-gray-200'
+              }`}
+              title={showTranslation ? '번역 끄기' : '번역 켜기'}
+            >
+              <Languages className="w-5 h-5" />
+            </button>
+
+            {/* 시간 표시 */}
+            <div className="text-sm text-gray-600">
+              {formatTime(currentTime)} / {formatTime(duration)}
+            </div>
           </div>
         </div>
       </div>

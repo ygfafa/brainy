@@ -9,6 +9,7 @@ type SubtitleStore = {
   currentIndex: number
   currentTime: number
   playerRef: YouTubePlayerRef | null
+  showTranslation: boolean
 
   // 액션
   setSubtitles: (subtitles: Subtitle[]) => void
@@ -18,6 +19,7 @@ type SubtitleStore = {
   syncWithTime: (time: number) => void
   nextSubtitle: () => void
   prevSubtitle: () => void
+  toggleTranslation: () => void
 }
 
 export const useSubtitleStore = create<SubtitleStore>((set, get) => ({
@@ -26,6 +28,7 @@ export const useSubtitleStore = create<SubtitleStore>((set, get) => ({
   currentIndex: 0,
   currentTime: 0,
   playerRef: null,
+  showTranslation: true,
 
   // 액션 구현
   setSubtitles: subtitles => set({ subtitles }),
@@ -80,5 +83,9 @@ export const useSubtitleStore = create<SubtitleStore>((set, get) => ({
       playerRef.seekTo(subtitles[prevIndex].startTime)
       set({ currentIndex: prevIndex })
     }
+  },
+
+  toggleTranslation: () => {
+    set(state => ({ showTranslation: !state.showTranslation }))
   },
 }))
