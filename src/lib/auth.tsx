@@ -1,6 +1,4 @@
-import { Navigate } from 'react-router'
-
-import { useLocation } from 'react-router'
+import { Navigate, useLocation } from 'react-router'
 
 export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation()
