@@ -8,17 +8,15 @@ type SubtitleStore = {
   subtitles: Subtitle[]
   currentIndex: number
   currentTime: number
-  playerRef: YouTubePlayerRef | null
-  showTranslation: boolean
+  isTranslationActive: boolean
 
   // 액션
   setSubtitles: (subtitles: Subtitle[]) => void
-  setCurrentIndex: (index: number) => void
+  setCurrentIndex: (index: number, playerRef?: YouTubePlayerRef | null) => void
   setCurrentTime: (time: number) => void
-  setPlayerRef: (ref: YouTubePlayerRef | null) => void
   syncWithTime: (time: number) => void
-  nextSubtitle: () => void
-  prevSubtitle: () => void
+  nextSubtitle: (playerRef?: YouTubePlayerRef | null) => void
+  prevSubtitle: (playerRef?: YouTubePlayerRef | null) => void
   toggleTranslation: () => void
 }
 
@@ -27,14 +25,13 @@ export const useSubtitleStore = create<SubtitleStore>((set, get) => ({
   subtitles: [],
   currentIndex: 0,
   currentTime: 0,
-  playerRef: null,
-  showTranslation: true,
+  isTranslationActive: true,
 
   // 액션 구현
   setSubtitles: subtitles => set({ subtitles }),
 
-  setCurrentIndex: index => {
-    const { subtitles, playerRef } = get()
+  setCurrentIndex: (index, playerRef) => {
+    const { subtitles } = get()
     if (index >= 0 && index < subtitles.length) {
       set({ currentIndex: index })
       // 캐러셀 변경 시 영상도 이동
@@ -48,8 +45,6 @@ export const useSubtitleStore = create<SubtitleStore>((set, get) => ({
     set({ currentTime: time })
     get().syncWithTime(time)
   },
-
-  setPlayerRef: ref => set({ playerRef: ref }),
 
   syncWithTime: time => {
     const { subtitles, currentIndex } = get()
@@ -65,27 +60,31 @@ export const useSubtitleStore = create<SubtitleStore>((set, get) => ({
     }
   },
 
-  nextSubtitle: () => {
-    const { currentIndex, subtitles, playerRef } = get()
+  nextSubtitle: playerRef => {
+    const { currentIndex, subtitles } = get()
     const nextIndex = currentIndex + 1
 
-    if (nextIndex < subtitles.length && playerRef) {
-      playerRef.seekTo(subtitles[nextIndex].startTime)
+    if (nextIndex < subtitles.length) {
       set({ currentIndex: nextIndex })
+      if (playerRef) {
+        playerRef.seekTo(subtitles[nextIndex].startTime)
+      }
     }
   },
 
-  prevSubtitle: () => {
-    const { currentIndex, subtitles, playerRef } = get()
+  prevSubtitle: playerRef => {
+    const { currentIndex, subtitles } = get()
     const prevIndex = currentIndex - 1
 
-    if (prevIndex >= 0 && playerRef) {
-      playerRef.seekTo(subtitles[prevIndex].startTime)
+    if (prevIndex >= 0) {
       set({ currentIndex: prevIndex })
+      if (playerRef) {
+        playerRef.seekTo(subtitles[prevIndex].startTime)
+      }
     }
   },
 
   toggleTranslation: () => {
-    set(state => ({ showTranslation: !state.showTranslation }))
+    set(state => ({ isTranslationActive: !state.isTranslationActive }))
   },
 }))

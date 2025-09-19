@@ -20,7 +20,7 @@ export const VideoControls = ({ playerRef }: VideoControlsProps) => {
   const [currentTime, setCurrentTime] = useState(0)
   const [duration, setDuration] = useState(0)
 
-  const { currentIndex, subtitles, nextSubtitle, prevSubtitle, showTranslation, toggleTranslation } =
+  const { currentIndex, subtitles, nextSubtitle, prevSubtitle, isTranslationActive, toggleTranslation } =
     useSubtitleStore()
 
   const hasPrevSubtitle = currentIndex > 0
@@ -84,13 +84,13 @@ export const VideoControls = ({ playerRef }: VideoControlsProps) => {
 
   const handlePrevious = () => {
     if (hasPrevSubtitle) {
-      prevSubtitle()
+      prevSubtitle(playerRef.current)
     }
   }
 
   const handleNext = () => {
     if (hasNextSubtitle) {
-      nextSubtitle()
+      nextSubtitle(playerRef.current)
     }
   }
 
@@ -140,11 +140,11 @@ export const VideoControls = ({ playerRef }: VideoControlsProps) => {
             <button
               onClick={toggleTranslation}
               className={`p-2 rounded-full transition-colors ${
-                showTranslation
+                isTranslationActive
                   ? 'bg-blue-100 text-blue-600 hover:bg-blue-200'
                   : 'bg-gray-100 text-gray-400 hover:bg-gray-200'
               }`}
-              title={showTranslation ? '번역 끄기' : '번역 켜기'}
+              title={isTranslationActive ? '번역 끄기' : '번역 켜기'}
             >
               <Languages className="w-5 h-5" />
             </button>
