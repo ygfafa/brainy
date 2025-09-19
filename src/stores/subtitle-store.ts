@@ -16,7 +16,8 @@ type SubtitleStore = {
   setCurrentTime: (time: number) => void
   setPlayerRef: (ref: YouTubePlayerRef | null) => void
   syncWithTime: (time: number) => void
-  seekToSubtitle: (index: number) => void
+  nextSubtitle: () => void
+  prevSubtitle: () => void
 }
 
 export const useSubtitleStore = create<SubtitleStore>((set, get) => ({
@@ -27,9 +28,9 @@ export const useSubtitleStore = create<SubtitleStore>((set, get) => ({
   playerRef: null,
 
   // 액션 구현
-  setSubtitles: (subtitles) => set({ subtitles }),
+  setSubtitles: subtitles => set({ subtitles }),
 
-  setCurrentIndex: (index) => {
+  setCurrentIndex: index => {
     const { subtitles, playerRef } = get()
     if (index >= 0 && index < subtitles.length) {
       set({ currentIndex: index })
@@ -40,19 +41,19 @@ export const useSubtitleStore = create<SubtitleStore>((set, get) => ({
     }
   },
 
-  setCurrentTime: (time) => {
+  setCurrentTime: time => {
     set({ currentTime: time })
     get().syncWithTime(time)
   },
 
-  setPlayerRef: (ref) => set({ playerRef: ref }),
+  setPlayerRef: ref => set({ playerRef: ref }),
 
-  syncWithTime: (time) => {
+  syncWithTime: time => {
     const { subtitles, currentIndex } = get()
 
     // 현재 시간에 해당하는 자막 찾기
     const newIndex = subtitles.findIndex(
-      (subtitle) => time >= subtitle.startTime && time < subtitle.endTime
+      subtitle => time >= subtitle.startTime && time < subtitle.endTime,
     )
 
     // 새로운 자막으로 이동해야 하는 경우
@@ -61,11 +62,23 @@ export const useSubtitleStore = create<SubtitleStore>((set, get) => ({
     }
   },
 
-  seekToSubtitle: (index) => {
-    const { subtitles, playerRef } = get()
-    if (index >= 0 && index < subtitles.length && playerRef) {
-      playerRef.seekTo(subtitles[index].startTime)
-      set({ currentIndex: index })
+  nextSubtitle: () => {
+    const { currentIndex, subtitles, playerRef } = get()
+    const nextIndex = currentIndex + 1
+
+    if (nextIndex < subtitles.length && playerRef) {
+      playerRef.seekTo(subtitles[nextIndex].startTime)
+      set({ currentIndex: nextIndex })
+    }
+  },
+
+  prevSubtitle: () => {
+    const { currentIndex, subtitles, playerRef } = get()
+    const prevIndex = currentIndex - 1
+
+    if (prevIndex >= 0 && playerRef) {
+      playerRef.seekTo(subtitles[prevIndex].startTime)
+      set({ currentIndex: prevIndex })
     }
   },
 }))
