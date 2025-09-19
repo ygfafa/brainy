@@ -20,8 +20,8 @@ export const SubtitleCarousel = ({ subtitles }: SubtitleCarouselProps) => {
     mode: 'snap',
     slides: {
       origin: 'center',
-      perView: 1.2,
-      spacing: 16,
+      perView: 1.1, // 중앙 카드와 좌우 카드 일부가 보이도록
+      spacing: 12,
     },
     slideChanged(slider) {
       // 슬라이드가 변경되면 스토어 업데이트 (영상 시간도 변경됨)
@@ -43,29 +43,16 @@ export const SubtitleCarousel = ({ subtitles }: SubtitleCarouselProps) => {
   }, [currentIndex, instanceRef])
 
   return (
-    <div className="relative w-full bg-gray-50 py-4">
+    <div className="relative w-full bg-gray-50 py-6 px-4">
       <div ref={sliderRef} className="keen-slider">
         {subtitles.map((subtitle, index) => (
-          <div key={subtitle.id} className="keen-slider__slide">
+          <div key={subtitle.id} className="keen-slider__slide py-2">
             <SubtitleCard
               subtitle={subtitle}
               isActive={index === currentIndex}
               onClick={() => setCurrentIndex(index)}
             />
           </div>
-        ))}
-      </div>
-
-      {/* 인디케이터 */}
-      <div className="flex justify-center gap-1 mt-4">
-        {subtitles.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => setCurrentIndex(index)}
-            className={`h-1.5 rounded-full transition-all ${
-              index === currentIndex ? 'w-8 bg-red-500' : 'w-1.5 bg-gray-300'
-            }`}
-          />
         ))}
       </div>
     </div>

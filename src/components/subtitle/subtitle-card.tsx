@@ -20,20 +20,20 @@ export const SubtitleCard = ({ subtitle, isActive, onClick }: SubtitleCardProps)
     <div
       onClick={onClick}
       className={cn(
-        'bg-white rounded-lg shadow-md p-4 cursor-pointer transition-all duration-300',
-        'hover:shadow-lg hover:scale-105',
-        isActive && 'border-2 border-red-500 bg-red-50',
+        'bg-white rounded-xl shadow-sm p-5 cursor-pointer transition-all duration-300 min-h-[180px] flex flex-col',
+        'hover:shadow-md',
+        isActive && 'ring-2 ring-red-500 bg-red-50 shadow-md scale-105',
       )}
     >
-      <div className="flex items-center gap-2 mb-2 text-xs text-gray-500">
+      <div className="flex items-center gap-2 mb-3 text-xs text-gray-500">
         <Clock className="w-3 h-3" />
         <span>
           {formatTime(subtitle.startTime)} - {formatTime(subtitle.endTime)}
         </span>
       </div>
 
-      <div className="space-y-3">
-        <p className="text-lg font-medium text-gray-900 leading-relaxed">{subtitle.text}</p>
+      <div className="flex-1 flex flex-col justify-center space-y-3">
+        <p className="text-base font-medium text-gray-900 leading-relaxed">{subtitle.text}</p>
         <p className="text-sm text-gray-600 leading-relaxed">{subtitle.translation}</p>
       </div>
     </div>
