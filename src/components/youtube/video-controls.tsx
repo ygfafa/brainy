@@ -14,23 +14,52 @@ export const VideoControls = ({ playerRef }: VideoControlsProps) => {
   const [currentTime, setCurrentTime] = useState(0)
   const [duration, setDuration] = useState(0)
 
-  const { currentIndex, subtitles, seekToSubtitle } = useSubtitleStore()
+  const { currentIndex, subtitles, nextSubtitle, prevSubtitle } = useSubtitleStore()
 
   const hasPrevSubtitle = currentIndex > 0
   const hasNextSubtitle = currentIndex < subtitles.length - 1
 
+  // Duration은 비디오 로드 시 한 번만 설정
   useEffect(() => {
-    const interval = setInterval(() => {
-      if (playerRef.current) {
-        setCurrentTime(playerRef.current.getCurrentTime())
-        setDuration(playerRef.current.getDuration())
-
-        const state = playerRef.current.getPlayerState()
-        setIsPlaying(state === 1) // 1 = PLAYING
+    if (playerRef.current) {
+      const checkDuration = () => {
+        const dur = playerRef.current?.getDuration()
+        if (dur && dur > 0) {
+          setDuration(dur)
+        } else {
+          // Duration이 아직 준비되지 않았으면 재시도
+          setTimeout(checkDuration, 500)
+        }
       }
-    }, 1000)
+      checkDuration()
+    }
+  }, [playerRef])
 
-    return () => clearInterval(interval)
+  // requestAnimationFrame으로 부드러운 시간 업데이트 (항상 실행)
+  useEffect(() => {
+    let animationId: number
+
+    const updateTime = () => {
+      if (playerRef.current) {
+        const time = playerRef.current.getCurrentTime()
+        const state = playerRef.current.getPlayerState()
+
+        setCurrentTime(time)
+        setIsPlaying(state === 1)
+      }
+
+      // 항상 다음 프레임 요청
+      animationId = requestAnimationFrame(updateTime)
+    }
+
+    // 시작
+    updateTime()
+
+    return () => {
+      if (animationId) {
+        cancelAnimationFrame(animationId)
+      }
+    }
   }, [playerRef])
 
   const handlePlayPause = () => {
@@ -39,28 +68,23 @@ export const VideoControls = ({ playerRef }: VideoControlsProps) => {
     if (isPlaying) {
       playerRef.current.pause()
       setIsPlaying(false)
-    } else {
-      playerRef.current.play()
-      setIsPlaying(true)
+
+      return
     }
+    playerRef.current.play()
+    setIsPlaying(true)
   }
 
   const handlePrevious = () => {
     if (hasPrevSubtitle) {
-      seekToSubtitle(currentIndex - 1)
+      prevSubtitle()
     }
   }
 
   const handleNext = () => {
     if (hasNextSubtitle) {
-      seekToSubtitle(currentIndex + 1)
+      nextSubtitle()
     }
-  }
-
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60)
-    const secs = Math.floor(seconds % 60)
-    return `${mins}:${secs.toString().padStart(2, '0')}`
   }
 
   const progressPercentage = duration > 0 ? (currentTime / duration) * 100 : 0
@@ -70,7 +94,7 @@ export const VideoControls = ({ playerRef }: VideoControlsProps) => {
       <div className="max-w-[640px] mx-auto">
         <div className="h-1 bg-gray-200">
           <div
-            className="h-full bg-red-600 transition-all duration-1000"
+            className="h-full bg-red-600 transition-all duration-100"
             style={{ width: `${progressPercentage}%` }}
           />
         </div>
@@ -91,11 +115,7 @@ export const VideoControls = ({ playerRef }: VideoControlsProps) => {
               onClick={handlePlayPause}
               className="p-3 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors"
             >
-              {isPlaying ? (
-                <Pause className="w-6 h-6" />
-              ) : (
-                <Play className="w-6 h-6 ml-0.5" />
-              )}
+              {isPlaying ? <Pause className="w-6 h-6" /> : <Play className="w-6 h-6 ml-0.5" />}
             </button>
 
             {/* 다음 자막 버튼 */}
@@ -106,10 +126,6 @@ export const VideoControls = ({ playerRef }: VideoControlsProps) => {
             >
               <ChevronRight className="w-5 h-5" />
             </button>
-          </div>
-
-          <div className="text-sm text-gray-600">
-            {formatTime(currentTime)} / {formatTime(duration)}
           </div>
         </div>
       </div>
