@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router'
 
-import { SubtitleCarousel } from '@/components/subtitle/subtitle-carousel'
 import { VideoControls } from '@/components/youtube/video-controls'
 import { YouTubePlayer, type YouTubePlayerRef } from '@/components/youtube/youtube-player'
 import { defaultSubtitles, mockSubtitles } from '@/data/mock-subtitles'
@@ -12,7 +11,7 @@ const WatchPage = () => {
   const playerRef = useRef<YouTubePlayerRef>(null)
   const [playerState, setPlayerState] = useState(-1)
 
-  const { setSubtitles, setPlayerRef, setCurrentTime, subtitles } = useSubtitleStore()
+  const { setSubtitles, setPlayerRef, setCurrentTime, subtitles, currentIndex } = useSubtitleStore()
 
   // 비디오 ID에 맞는 자막 로드
   useEffect(() => {
@@ -46,19 +45,22 @@ const WatchPage = () => {
     return <div className="p-4">비디오를 찾을 수 없습니다.</div>
   }
 
+  const currentSubtitle = subtitles[currentIndex]
+
   return (
     <div className="min-h-screen bg-white pb-20">
       <YouTubePlayer ref={playerRef} videoId={videoId} onStateChange={setPlayerState} />
 
-      {/* 자막 캐러셀 */}
-      <SubtitleCarousel subtitles={subtitles} />
-
+      {/* 현재 자막 표시 */}
       <div className="p-4">
-        <h1 className="text-lg font-semibold">
-          {playerState === 1 ? '재생 중' : playerState === 2 ? '일시정지' : '비디오 로딩 중...'}
-        </h1>
-        <p className="text-sm text-gray-600 mt-2">
-          스와이프하거나 카드를 클릭하여 원하는 구간으로 이동하세요.
+        {currentSubtitle && (
+          <div className="bg-gray-50 rounded-lg p-4 mb-4">
+            <p className="text-lg font-medium mb-2">{currentSubtitle.text}</p>
+            <p className="text-sm text-gray-600">{currentSubtitle.translation}</p>
+          </div>
+        )}
+        <p className="text-xs text-gray-500">
+          {currentIndex + 1} / {subtitles.length} 자막
         </p>
       </div>
 
