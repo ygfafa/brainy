@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight, Languages, Pause, Play } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Pause, Play } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 import { useSubtitleStore } from '@/stores/subtitle-store'
@@ -9,64 +9,28 @@ type VideoControlsProps = {
   playerRef: React.RefObject<YouTubePlayerRef | null>
 }
 
-const formatTime = (seconds: number) => {
-  const mins = Math.floor(seconds / 60)
-  const secs = Math.floor(seconds % 60)
-  return `${mins}:${secs.toString().padStart(2, '0')}`
-}
-
 export const VideoControls = ({ playerRef }: VideoControlsProps) => {
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentTime, setCurrentTime] = useState(0)
   const [duration, setDuration] = useState(0)
 
-  const { currentIndex, subtitles, nextSubtitle, prevSubtitle, isTranslationActive, toggleTranslation } =
-    useSubtitleStore()
+  const { currentIndex, subtitles, nextSubtitle, prevSubtitle } = useSubtitleStore()
 
   const hasPrevSubtitle = currentIndex > 0
   const hasNextSubtitle = currentIndex < subtitles.length - 1
 
-  // Duration은 비디오 로드 시 한 번만 설정
   useEffect(() => {
-    if (playerRef.current) {
-      const checkDuration = () => {
-        const dur = playerRef.current?.getDuration()
-        if (dur && dur > 0) {
-          setDuration(dur)
-        } else {
-          // Duration이 아직 준비되지 않았으면 재시도
-          setTimeout(checkDuration, 500)
-        }
-      }
-      checkDuration()
-    }
-  }, [playerRef])
-
-  // requestAnimationFrame으로 부드러운 시간 업데이트 (항상 실행)
-  useEffect(() => {
-    let animationId: number
-
-    const updateTime = () => {
+    const interval = setInterval(() => {
       if (playerRef.current) {
-        const time = playerRef.current.getCurrentTime()
+        setCurrentTime(playerRef.current.getCurrentTime())
+        setDuration(playerRef.current.getDuration())
+
         const state = playerRef.current.getPlayerState()
-
-        setCurrentTime(time)
-        setIsPlaying(state === 1)
+        setIsPlaying(state === 1) // 1 = PLAYING
       }
+    }, 1000)
 
-      // 항상 다음 프레임 요청
-      animationId = requestAnimationFrame(updateTime)
-    }
-
-    // 시작
-    updateTime()
-
-    return () => {
-      if (animationId) {
-        cancelAnimationFrame(animationId)
-      }
-    }
+    return () => clearInterval(interval)
   }, [playerRef])
 
   const handlePlayPause = () => {
@@ -75,11 +39,10 @@ export const VideoControls = ({ playerRef }: VideoControlsProps) => {
     if (isPlaying) {
       playerRef.current.pause()
       setIsPlaying(false)
-
-      return
+    } else {
+      playerRef.current.play()
+      setIsPlaying(true)
     }
-    playerRef.current.play()
-    setIsPlaying(true)
   }
 
   const handlePrevious = () => {
@@ -94,6 +57,12 @@ export const VideoControls = ({ playerRef }: VideoControlsProps) => {
     }
   }
 
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60)
+    const secs = Math.floor(seconds % 60)
+    return `${mins}:${secs.toString().padStart(2, '0')}`
+  }
+
   const progressPercentage = duration > 0 ? (currentTime / duration) * 100 : 0
 
   return (
@@ -101,7 +70,7 @@ export const VideoControls = ({ playerRef }: VideoControlsProps) => {
       <div className="max-w-[640px] mx-auto">
         <div className="h-1 bg-gray-200">
           <div
-            className="h-full bg-red-600 transition-all duration-100"
+            className="h-full bg-red-600 transition-all duration-1000"
             style={{ width: `${progressPercentage}%` }}
           />
         </div>
@@ -135,24 +104,8 @@ export const VideoControls = ({ playerRef }: VideoControlsProps) => {
             </button>
           </div>
 
-          <div className="flex items-center gap-3">
-            {/* 번역 토글 버튼 */}
-            <button
-              onClick={toggleTranslation}
-              className={`p-2 rounded-full transition-colors ${
-                isTranslationActive
-                  ? 'bg-blue-100 text-blue-600 hover:bg-blue-200'
-                  : 'bg-gray-100 text-gray-400 hover:bg-gray-200'
-              }`}
-              title={isTranslationActive ? '번역 끄기' : '번역 켜기'}
-            >
-              <Languages className="w-5 h-5" />
-            </button>
-
-            {/* 시간 표시 */}
-            <div className="text-sm text-gray-600">
-              {formatTime(currentTime)} / {formatTime(duration)}
-            </div>
+          <div className="text-sm text-gray-600">
+            {formatTime(currentTime)} / {formatTime(duration)}
           </div>
         </div>
       </div>
