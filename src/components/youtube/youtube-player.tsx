@@ -117,7 +117,11 @@ export const YouTubePlayer = forwardRef<YouTubePlayerRef, YouTubePlayerProps>(
             </p>
           </div>
         ) : (
-          <div id="youtube-player" ref={containerRef} className="w-full h-full" />
+          <>
+            <div id="youtube-player" ref={containerRef} className="w-full h-full" />
+            {/* YouTube 플레이어 클릭 방지 오버레이 */}
+            <div className="absolute inset-0 z-10" />
+          </>
         )}
       </div>
     )
