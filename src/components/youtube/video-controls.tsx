@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import type { YouTubePlayerRef } from './youtube-player'
 
 type VideoControlsProps = {
-  playerRef: React.RefObject<YouTubePlayerRef>
+  playerRef: React.RefObject<YouTubePlayerRef | null>
 }
 
 export const VideoControls = ({ playerRef }: VideoControlsProps) => {

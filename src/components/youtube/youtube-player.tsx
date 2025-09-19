@@ -1,6 +1,24 @@
 import { Play } from 'lucide-react'
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react'
 
+// YouTube iframe API 타입 정의
+type YTPlayer = {
+  playVideo(): void
+  pauseVideo(): void
+  stopVideo(): void
+  seekTo(seconds: number, allowSeekAhead?: boolean): void
+  getPlayerState(): number
+  getCurrentTime(): number
+  getDuration(): number
+  getVideoLoadedFraction(): number
+  mute(): void
+  unMute(): void
+  isMuted(): boolean
+  setVolume(volume: number): void
+  getVolume(): number
+  destroy(): void
+}
+
 type YouTubePlayerProps = {
   videoId: string
   onStateChange?: (state: number) => void
@@ -17,7 +35,7 @@ export type YouTubePlayerRef = {
 export const YouTubePlayer = forwardRef<YouTubePlayerRef, YouTubePlayerProps>(
   ({ videoId, onStateChange }, ref) => {
     const [showPlayer, setShowPlayer] = useState(false)
-    const playerRef = useRef<YT.Player | null>(null)
+    const playerRef = useRef<YTPlayer | null>(null)
     const containerRef = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
@@ -56,7 +74,7 @@ export const YouTubePlayer = forwardRef<YouTubePlayerRef, YouTubePlayerProps>(
             fs: 0,
           },
           events: {
-            onStateChange: (event) => {
+            onStateChange: event => {
               onStateChange?.(event.data)
             },
           },
@@ -103,9 +121,3 @@ export const YouTubePlayer = forwardRef<YouTubePlayerRef, YouTubePlayerProps>(
     )
   },
 )
-
-// controls=0: 기본 컨트롤 숨김
-// modestbranding=1: YouTube 로고 최소화
-// rel=0: 관련 영상 미표시
-// showinfo=0: 영상 정보 숨김
-// disablekb=1: 키보드 컨트롤 비활성화

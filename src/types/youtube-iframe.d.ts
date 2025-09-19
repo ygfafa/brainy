@@ -1,43 +1,35 @@
 declare global {
   interface Window {
-    YT: {
-      Player: new (
-        elementId: string,
-        config: {
-          videoId: string
-          playerVars?: {
-            autoplay?: 0 | 1
-            controls?: 0 | 1
-            modestbranding?: 0 | 1
-            rel?: 0 | 1
-            showinfo?: 0 | 1
-            iv_load_policy?: 1 | 3
-            autohide?: 0 | 1
-            playsinline?: 0 | 1
-            disablekb?: 0 | 1
-            fs?: 0 | 1
-          }
-          events?: {
-            onReady?: (event: YT.PlayerEvent) => void
-            onStateChange?: (event: YT.OnStateChangeEvent) => void
-          }
-        },
-      ) => YT.Player
-      PlayerState: {
-        UNSTARTED: -1
-        ENDED: 0
-        PLAYING: 1
-        PAUSED: 2
-        BUFFERING: 3
-        CUED: 5
-      }
-    }
+    YT: typeof YT
     onYouTubeIframeAPIReady?: () => void
   }
 }
 
 declare namespace YT {
-  interface Player {
+  class Player {
+    constructor(
+      elementId: string,
+      config: {
+        videoId: string
+        playerVars?: {
+          autoplay?: 0 | 1
+          controls?: 0 | 1
+          modestbranding?: 0 | 1
+          rel?: 0 | 1
+          showinfo?: 0 | 1
+          iv_load_policy?: 1 | 3
+          autohide?: 0 | 1
+          playsinline?: 0 | 1
+          disablekb?: 0 | 1
+          fs?: 0 | 1
+        }
+        events?: {
+          onReady?: (event: YT.PlayerEvent) => void
+          onStateChange?: (event: YT.OnStateChangeEvent) => void
+        }
+      },
+    )
+
     playVideo(): void
     pauseVideo(): void
     stopVideo(): void
@@ -52,6 +44,15 @@ declare namespace YT {
     setVolume(volume: number): void
     getVolume(): number
     destroy(): void
+  }
+
+  const PlayerState: {
+    UNSTARTED: -1
+    ENDED: 0
+    PLAYING: 1
+    PAUSED: 2
+    BUFFERING: 3
+    CUED: 5
   }
 
   interface PlayerEvent {
