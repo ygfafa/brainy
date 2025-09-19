@@ -1,0 +1,153 @@
+import type { Category,Shorts, Video } from '@/types/youtube'
+
+export const mockCategories: Category[] = [
+  { id: '1', label: '전체', active: true },
+  { id: '2', label: '음악' },
+  { id: '3', label: '라이브' },
+  { id: '4', label: '게임' },
+  { id: '5', label: '뉴스' },
+  { id: '6', label: '스포츠' },
+  { id: '7', label: '학습' },
+  { id: '8', label: '요리' },
+  { id: '9', label: '최근에 업로드된 동영상' },
+  { id: '10', label: '감상한 동영상' },
+  { id: '11', label: '새로운 맞춤 동영상' },
+]
+
+export const mockVideos: Video[] = [
+  {
+    id: '1',
+    thumbnail: 'https://picsum.photos/360/200?random=1',
+    title: '🎧playlist 여권 없이 떠나는 삼삼여행🛫 ✈️ | 도입부터 좋은 팝송 모음',
+    channel: {
+      name: 'eunyeai',
+      avatar: 'https://picsum.photos/40/40?random=11',
+      verified: true,
+    },
+    views: '조회수 3.8천회',
+    uploadedAt: '1개월 전',
+    duration: '2:25:02',
+  },
+  {
+    id: '2',
+    thumbnail: 'https://picsum.photos/360/200?random=2',
+    title: '유재석에게 폰트를 받을 수 있다면?',
+    channel: {
+      name: '런닝맨',
+      avatar: 'https://picsum.photos/40/40?random=12',
+      verified: true,
+    },
+    views: '조회수 120만회',
+    uploadedAt: '2일 전',
+    duration: '12:26',
+  },
+  {
+    id: '3',
+    thumbnail: 'https://picsum.photos/360/200?random=3',
+    title: '진짜 원함 #런닝맨',
+    channel: {
+      name: '런닝맨 · 스브스 공식 채널',
+      avatar: 'https://picsum.photos/40/40?random=13',
+      verified: true,
+    },
+    views: '조회수 22만회',
+    uploadedAt: '3일 전',
+    duration: '0:58',
+  },
+  {
+    id: '4',
+    thumbnail: 'https://picsum.photos/360/200?random=4',
+    title: '노코드 프롬프트 공유 플랫폼 개발',
+    channel: {
+      name: '개발자 김코딩',
+      avatar: 'https://picsum.photos/40/40?random=14',
+    },
+    views: '조회수 5.2천회',
+    uploadedAt: '5시간 전',
+    duration: '45:30',
+  },
+  {
+    id: '5',
+    thumbnail: 'https://picsum.photos/360/200?random=5',
+    title: '2024년 최고의 React 라이브러리 TOP 10',
+    channel: {
+      name: '프론트엔드 개발',
+      avatar: 'https://picsum.photos/40/40?random=15',
+      verified: true,
+    },
+    views: '조회수 8.9만회',
+    uploadedAt: '1주일 전',
+    duration: '18:45',
+  },
+  {
+    id: '6',
+    thumbnail: 'https://picsum.photos/360/200?random=6',
+    title: '집에서 만드는 초간단 김치찌개 레시피',
+    channel: {
+      name: '백종원의 요리비책',
+      avatar: 'https://picsum.photos/40/40?random=16',
+      verified: true,
+    },
+    views: '조회수 250만회',
+    uploadedAt: '3개월 전',
+    duration: '8:20',
+  },
+  {
+    id: '7',
+    thumbnail: 'https://picsum.photos/360/200?random=7',
+    title: '자바스크립트 딥다이브 - 클로저 완벽 이해',
+    channel: {
+      name: 'JavaScript Mastery',
+      avatar: 'https://picsum.photos/40/40?random=17',
+    },
+    views: '조회수 1.5만회',
+    uploadedAt: '2주일 전',
+    duration: '32:15',
+  },
+  {
+    id: '8',
+    thumbnail: 'https://picsum.photos/360/200?random=8',
+    title: '아이유(IU) - Love wins all (Official MV)',
+    channel: {
+      name: 'EDAM엔터테인먼트',
+      avatar: 'https://picsum.photos/40/40?random=18',
+      verified: true,
+    },
+    views: '조회수 5200만회',
+    uploadedAt: '10개월 전',
+    duration: '5:04',
+  },
+]
+
+export const mockShorts: Shorts[] = [
+  {
+    id: 's1',
+    thumbnail: 'https://picsum.photos/240/400?random=21',
+    title: '이것만 알면 코딩 고수',
+    views: '52만',
+  },
+  {
+    id: 's2',
+    thumbnail: 'https://picsum.photos/240/400?random=22',
+    title: 'React 꿀팁 대방출',
+    views: '28만',
+  },
+  {
+    id: 's3',
+    thumbnail: 'https://picsum.photos/240/400?random=23',
+    title: '1분만에 배우는 Git',
+    views: '15만',
+  },
+  {
+    id: 's4',
+    thumbnail: 'https://picsum.photos/240/400?random=24',
+    title: '개발자 현실 팩트체크',
+    views: '89만',
+  },
+  {
+    id: 's5',
+    thumbnail: 'https://picsum.photos/240/400?random=25',
+    title: 'CSS 애니메이션 꿀팁',
+    views: '32만',
+  },
+]
