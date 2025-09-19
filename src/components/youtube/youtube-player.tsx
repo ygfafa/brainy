@@ -30,6 +30,7 @@ export type YouTubePlayerRef = {
   getCurrentTime: () => number
   getDuration: () => number
   getPlayerState: () => number
+  seekTo: (seconds: number) => void
 }
 
 export const YouTubePlayer = forwardRef<YouTubePlayerRef, YouTubePlayerProps>(
@@ -99,6 +100,7 @@ export const YouTubePlayer = forwardRef<YouTubePlayerRef, YouTubePlayerProps>(
       getCurrentTime: () => playerRef.current?.getCurrentTime() || 0,
       getDuration: () => playerRef.current?.getDuration() || 0,
       getPlayerState: () => playerRef.current?.getPlayerState() || -1,
+      seekTo: (seconds: number) => playerRef.current?.seekTo(seconds, true),
     }))
 
     return (
