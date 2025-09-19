@@ -20,7 +20,7 @@ const SavedSubtitlesPage = () => {
           >
             <ArrowLeft className="w-5 h-5" />
           </button>
-          <h1 className="text-lg font-semibold">내가 담은 자막</h1>
+          <h1 className="text-lg font-semibold">장바구니</h1>
         </div>
       </header>
 
@@ -28,7 +28,7 @@ const SavedSubtitlesPage = () => {
       <main className="max-w-4xl mx-auto px-4 py-6">
         {savedSubtitles.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-gray-500 mb-2">아직 담은 자막이 없습니다</p>
+            <p className="text-gray-500 mb-2">장바구니가 비어있습니다</p>
             <p className="text-sm text-gray-400">영상을 보며 자막을 담아보세요</p>
           </div>
         ) : (

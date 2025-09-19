@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { useParams } from 'react-router'
+import { useParams, useSearchParams } from 'react-router'
 
 import { SaveSubtitleButton } from '@/components/save-subtitle-button'
 import { VideoControls } from '@/components/youtube/video-controls'
@@ -9,6 +9,7 @@ import { useSubtitleStore } from '@/stores/subtitle-store'
 
 const WatchPage = () => {
   const { videoId } = useParams<{ videoId: string }>()
+  const [searchParams] = useSearchParams()
   const playerRef = useRef<YouTubePlayerRef>(null)
   const [playerState, setPlayerState] = useState(-1)
 

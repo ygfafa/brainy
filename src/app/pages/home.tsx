@@ -1,4 +1,4 @@
-import { Bookmark } from 'lucide-react'
+import { ShoppingCart } from 'lucide-react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router'
 
@@ -35,8 +35,8 @@ const HomePage = () => {
           onClick={() => navigate(paths.savedSubtitles.getHref())}
           className="flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors"
         >
-          <Bookmark className="w-4 h-4" />
-          <span className="font-medium">내가 담은 자막</span>
+          <ShoppingCart className="w-4 h-4" />
+          <span className="font-medium">장바구니</span>
           {savedSubtitles.length > 0 && (
             <span className="ml-1 px-2 py-0.5 bg-blue-500 text-white text-xs rounded-full">
               {savedSubtitles.length}
