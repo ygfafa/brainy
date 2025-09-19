@@ -6,17 +6,14 @@ import type { Category } from '@/types/youtube'
 type CategoryTabsProps = {
   categories: Category[]
   onCategoryClick?: (category: Category) => void
-  isVisible: boolean
 }
 
-export const CategoryTabs = ({ categories, onCategoryClick, isVisible }: CategoryTabsProps) => {
+export const CategoryTabs = ({ categories, onCategoryClick }: CategoryTabsProps) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null)
 
   return (
     <div
-      className={`fixed bg-white z-40 transition-transform duration-300 ${
-        isVisible ? 'translate-y-0' : '-translate-y-full'
-      }`}
+      className="fixed bg-white z-40"
       style={{ maxWidth: 640, margin: '0 auto', top: 56, left: 0, right: 0 }}
     >
       <div ref={scrollContainerRef} className="flex gap-3 px-4 py-3 overflow-x-auto scrollbar-hide">
