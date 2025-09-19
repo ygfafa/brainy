@@ -16,6 +16,9 @@ export const VideoControls = ({ playerRef }: VideoControlsProps) => {
 
   const { currentIndex, subtitles, seekToSubtitle } = useSubtitleStore()
 
+  const hasPrevSubtitle = currentIndex > 0
+  const hasNextSubtitle = currentIndex < subtitles.length - 1
+
   useEffect(() => {
     const interval = setInterval(() => {
       if (playerRef.current) {
@@ -43,13 +46,13 @@ export const VideoControls = ({ playerRef }: VideoControlsProps) => {
   }
 
   const handlePrevious = () => {
-    if (currentIndex > 0) {
+    if (hasPrevSubtitle) {
       seekToSubtitle(currentIndex - 1)
     }
   }
 
   const handleNext = () => {
-    if (currentIndex < subtitles.length - 1) {
+    if (hasNextSubtitle) {
       seekToSubtitle(currentIndex + 1)
     }
   }
@@ -77,7 +80,7 @@ export const VideoControls = ({ playerRef }: VideoControlsProps) => {
             {/* 이전 자막 버튼 */}
             <button
               onClick={handlePrevious}
-              disabled={currentIndex === 0}
+              disabled={!hasPrevSubtitle}
               className="p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <ChevronLeft className="w-5 h-5" />
@@ -98,7 +101,7 @@ export const VideoControls = ({ playerRef }: VideoControlsProps) => {
             {/* 다음 자막 버튼 */}
             <button
               onClick={handleNext}
-              disabled={currentIndex === subtitles.length - 1}
+              disabled={!hasNextSubtitle}
               className="p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <ChevronRight className="w-5 h-5" />
