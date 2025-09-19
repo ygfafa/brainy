@@ -28,6 +28,10 @@ export const createAppRouter = (queryClient: QueryClient) =>
       lazy: () => import('./pages/watch').then(convert(queryClient)),
     },
     {
+      path: paths.savedSubtitles.path,
+      lazy: () => import('./pages/saved-subtitles').then(convert(queryClient)),
+    },
+    {
       path: paths.auth.login.path,
       lazy: () => import('./pages/auth/login').then(convert(queryClient)),
     },

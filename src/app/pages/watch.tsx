@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router'
 
+import { SaveSubtitleButton } from '@/components/save-subtitle-button'
 import { VideoControls } from '@/components/youtube/video-controls'
 import { YouTubePlayer, type YouTubePlayerRef } from '@/components/youtube/youtube-player'
 import { defaultSubtitles, mockSubtitles } from '@/data/mock-subtitles'
@@ -11,13 +12,8 @@ const WatchPage = () => {
   const playerRef = useRef<YouTubePlayerRef>(null)
   const [playerState, setPlayerState] = useState(-1)
 
-  const {
-    setSubtitles,
-    setCurrentTime,
-    subtitles,
-    currentIndex,
-    isTranslationActive,
-  } = useSubtitleStore()
+  const { setSubtitles, setCurrentTime, subtitles, currentIndex, isTranslationActive } =
+    useSubtitleStore()
 
   // 비디오 ID에 맞는 자막 로드
   useEffect(() => {
@@ -49,6 +45,9 @@ const WatchPage = () => {
   return (
     <div className="min-h-screen bg-white pb-20">
       <YouTubePlayer ref={playerRef} videoId={videoId} onStateChange={setPlayerState} />
+
+      {/* 자막 담기 버튼 */}
+      <SaveSubtitleButton />
 
       {/* 현재 자막 표시 */}
       <div className="p-4">
