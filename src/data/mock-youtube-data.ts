@@ -17,6 +17,7 @@ export const mockCategories: Category[] = [
 export const mockVideos: Video[] = [
   {
     id: '1',
+    videoId: 'dQw4w9WgXcQ',
     thumbnail: 'https://picsum.photos/360/200?random=1',
     title: '🎧playlist 여권 없이 떠나는 삼삼여행🛫 ✈️ | 도입부터 좋은 팝송 모음',
     channel: {
@@ -30,6 +31,7 @@ export const mockVideos: Video[] = [
   },
   {
     id: '2',
+    videoId: 'jNQXAC9IVRw',
     thumbnail: 'https://picsum.photos/360/200?random=2',
     title: '유재석에게 폰트를 받을 수 있다면?',
     channel: {
@@ -43,6 +45,7 @@ export const mockVideos: Video[] = [
   },
   {
     id: '3',
+    videoId: '9bZkp7q19f0',
     thumbnail: 'https://picsum.photos/360/200?random=3',
     title: '진짜 원함 #런닝맨',
     channel: {
@@ -56,6 +59,7 @@ export const mockVideos: Video[] = [
   },
   {
     id: '4',
+    videoId: 'M7lc1UVf-VE',
     thumbnail: 'https://picsum.photos/360/200?random=4',
     title: '노코드 프롬프트 공유 플랫폼 개발',
     channel: {
@@ -68,6 +72,7 @@ export const mockVideos: Video[] = [
   },
   {
     id: '5',
+    videoId: 'kJQP7kiw5Fk',
     thumbnail: 'https://picsum.photos/360/200?random=5',
     title: '2024년 최고의 React 라이브러리 TOP 10',
     channel: {
@@ -81,6 +86,7 @@ export const mockVideos: Video[] = [
   },
   {
     id: '6',
+    videoId: 'YQHsXMglC9A',
     thumbnail: 'https://picsum.photos/360/200?random=6',
     title: '집에서 만드는 초간단 김치찌개 레시피',
     channel: {
@@ -94,6 +100,7 @@ export const mockVideos: Video[] = [
   },
   {
     id: '7',
+    videoId: '6J5tgEW9oIA',
     thumbnail: 'https://picsum.photos/360/200?random=7',
     title: '자바스크립트 딥다이브 - 클로저 완벽 이해',
     channel: {
@@ -106,6 +113,7 @@ export const mockVideos: Video[] = [
   },
   {
     id: '8',
+    videoId: 'QPBGXB1LCGU',
     thumbnail: 'https://picsum.photos/360/200?random=8',
     title: '아이유(IU) - Love wins all (Official MV)',
     channel: {

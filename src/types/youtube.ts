@@ -1,5 +1,6 @@
 export type Video = {
   id: string
+  videoId: string
   thumbnail: string
   title: string
   channel: {

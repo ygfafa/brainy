@@ -1,5 +1,7 @@
-import { CheckCircle,MoreVertical } from 'lucide-react'
+import { CheckCircle, MoreVertical } from 'lucide-react'
+import { useNavigate } from 'react-router'
 
+import { paths } from '@/config/paths'
 import type { Video } from '@/types/youtube'
 
 type VideoCardProps = {
@@ -9,8 +11,18 @@ type VideoCardProps = {
 }
 
 export const VideoCard = ({ video, onVideoClick, onMoreClick }: VideoCardProps) => {
+  const navigate = useNavigate()
+
+  const handleClick = () => {
+    if (onVideoClick) {
+      onVideoClick()
+    } else {
+      navigate(paths.watch.getHref(video.videoId))
+    }
+  }
+
   return (
-    <div className="flex flex-col cursor-pointer" onClick={onVideoClick}>
+    <div className="flex flex-col cursor-pointer" onClick={handleClick}>
       <div className="relative">
         <img
           src={video.thumbnail}

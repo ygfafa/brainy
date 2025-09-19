@@ -3,6 +3,10 @@ export const paths = {
     path: '/',
     getHref: () => '/',
   },
+  watch: {
+    path: '/watch/:videoId',
+    getHref: (videoId: string) => `/watch/${videoId}`,
+  },
   auth: {
     login: {
       path: '/auth/login',

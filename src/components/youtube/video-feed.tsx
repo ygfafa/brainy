@@ -13,7 +13,6 @@ export const VideoFeed = ({ videos }: VideoFeedProps) => {
         <VideoCard
           key={video.id}
           video={video}
-          onVideoClick={() => console.log('Video clicked:', video.id)}
           onMoreClick={() => console.log('More clicked:', video.id)}
         />
       ))}
