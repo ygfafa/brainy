@@ -8,7 +8,7 @@ type VideoFeedProps = {
 
 export const VideoFeed = ({ videos }: VideoFeedProps) => {
   return (
-    <div className="flex flex-col gap-4 px-4 pb-4">
+    <div className="flex flex-col gap-4 pb-4">
       {videos.map(video => (
         <VideoCard
           key={video.id}

@@ -13,13 +13,6 @@ export type Video = {
   duration: string
 }
 
-export type Shorts = {
-  id: string
-  thumbnail: string
-  title: string
-  views: string
-}
-
 export type Category = {
   id: string
   label: string

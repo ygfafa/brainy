@@ -24,16 +24,12 @@ export const VideoCard = ({ video, onVideoClick, onMoreClick }: VideoCardProps) 
   return (
     <div className="flex flex-col cursor-pointer" onClick={handleClick}>
       <div className="relative">
-        <img
-          src={video.thumbnail}
-          alt={video.title}
-          className="w-full aspect-video object-cover rounded-lg"
-        />
+        <img src={video.thumbnail} alt={video.title} className="w-full aspect-video object-cover" />
         <div className="absolute bottom-2 right-2 bg-black/80 text-white text-xs px-1 py-0.5 rounded">
           {video.duration}
         </div>
       </div>
-      <div className="flex gap-3 mt-3 px-1">
+      <div className="flex gap-3 mt-3 px-4">
         <img
           src={video.channel.avatar}
           alt={video.channel.name}
@@ -44,9 +40,7 @@ export const VideoCard = ({ video, onVideoClick, onMoreClick }: VideoCardProps) 
           <div className="text-xs text-gray-600">
             <div className="flex items-center gap-1">
               <span>{video.channel.name}</span>
-              {video.channel.verified && (
-                <CheckCircle className="w-3 h-3 fill-current" />
-              )}
+              {video.channel.verified && <CheckCircle className="w-3 h-3 fill-current" />}
             </div>
             <div className="flex items-center gap-1">
               <span>{video.views}</span>

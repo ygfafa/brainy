@@ -14,7 +14,7 @@ export const CategoryTabs = ({ categories, onCategoryClick }: CategoryTabsProps)
   return (
     <div
       className="fixed bg-white z-40"
-      style={{ maxWidth: 640, margin: '0 auto', top: 56, left: 0, right: 0 }}
+      style={{ maxWidth: 640, margin: '0 auto', top: 0, left: 0, right: 0 }}
     >
       <div ref={scrollContainerRef} className="flex gap-3 px-4 py-3 overflow-x-auto scrollbar-hide">
         {categories.map(category => (

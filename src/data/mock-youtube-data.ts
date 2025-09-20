@@ -1,4 +1,4 @@
-import type { Category,Shorts, Video } from '@/types/youtube'
+import type { Category, Video } from '@/types/youtube'
 
 export const mockCategories: Category[] = [
   { id: '1', label: '전체', active: true },
@@ -124,38 +124,5 @@ export const mockVideos: Video[] = [
     views: '조회수 5200만회',
     uploadedAt: '10개월 전',
     duration: '5:04',
-  },
-]
-
-export const mockShorts: Shorts[] = [
-  {
-    id: 's1',
-    thumbnail: 'https://picsum.photos/240/400?random=21',
-    title: '이것만 알면 코딩 고수',
-    views: '52만',
-  },
-  {
-    id: 's2',
-    thumbnail: 'https://picsum.photos/240/400?random=22',
-    title: 'React 꿀팁 대방출',
-    views: '28만',
-  },
-  {
-    id: 's3',
-    thumbnail: 'https://picsum.photos/240/400?random=23',
-    title: '1분만에 배우는 Git',
-    views: '15만',
-  },
-  {
-    id: 's4',
-    thumbnail: 'https://picsum.photos/240/400?random=24',
-    title: '개발자 현실 팩트체크',
-    views: '89만',
-  },
-  {
-    id: 's5',
-    thumbnail: 'https://picsum.photos/240/400?random=25',
-    title: 'CSS 애니메이션 꿀팁',
-    views: '32만',
   },
 ]
