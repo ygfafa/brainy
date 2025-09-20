@@ -6,10 +6,7 @@ export type Video = {
   channel: {
     name: string
     avatar: string
-    verified?: boolean
   }
-  views: string
-  uploadedAt: string
   duration: string
 }
 

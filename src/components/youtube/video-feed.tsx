@@ -8,13 +8,9 @@ type VideoFeedProps = {
 
 export const VideoFeed = ({ videos }: VideoFeedProps) => {
   return (
-    <div className="flex flex-col gap-4 pb-4">
+    <div className="flex flex-col gap-6 pb-6">
       {videos.map(video => (
-        <VideoCard
-          key={video.id}
-          video={video}
-          onMoreClick={() => console.log('More clicked:', video.id)}
-        />
+        <VideoCard key={video.id} video={video} />
       ))}
     </div>
   )
