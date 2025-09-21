@@ -1,12 +1,10 @@
 export type Video = {
-  id: string
   videoId: string
   thumbnail: string
   title: string
-  channel: {
-    name: string
-    avatar: string
-  }
+  description: string
+  level: number
+  subtitleCount: number
   duration: string
 }
 

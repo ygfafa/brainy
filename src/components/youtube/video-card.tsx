@@ -15,26 +15,52 @@ export const VideoCard = ({ video }: VideoCardProps) => {
   }
 
   return (
-    <div className="flex flex-col cursor-pointer" onClick={handleClick}>
+    <div className="flex flex-col" onClick={handleClick}>
       <div className="relative">
         <img src={video.thumbnail} alt={video.title} className="w-full aspect-video object-cover" />
         <div className="absolute bottom-2 right-2 bg-black/80 text-white text-xs px-1 py-0.5 rounded">
           {video.duration}
         </div>
       </div>
-      <div className="flex gap-3 mt-3 px-4">
-        <img
-          src={video.channel.avatar}
-          alt={video.channel.name}
-          className="w-9 h-9 rounded-full flex-shrink-0"
-        />
-        <div className="flex-1 min-w-0">
-          <h3 className="text-sm font-medium line-clamp-2 leading-5 mb-1">{video.title}</h3>
-          <div className="flex items-center gap-1 text-xs text-gray-600">
-            <span>{video.channel.name}</span>
-          </div>
+      <div className="flex-1 mt-3 px-3">
+        <h3 className="line-clamp-2 leading-5 mb-1">{video.title}</h3>
+        <p className="text-sm text-gray-600 mb-1">{video.description}</p>
+        <div className="flex items-center gap-1 text-sm text-gray-600">
+          <DifficultyLevel level={video.level as keyof typeof DIFFICULTY_LEVEL} />
+          <span>•</span>
+          <span>{video.subtitleCount}문장</span>
         </div>
       </div>
+    </div>
+  )
+}
+
+const DIFFICULTY_LEVEL = {
+  1: {
+    label: '쉬움',
+    color: '#008000',
+  },
+  2: {
+    label: '보통',
+    color: '#FFA500',
+  },
+  3: {
+    label: '어려움',
+    color: '#FF0000',
+  },
+}
+
+type DifficultyLevelProps = {
+  level: keyof typeof DIFFICULTY_LEVEL
+}
+const DifficultyLevel = ({ level }: DifficultyLevelProps) => {
+  return (
+    <div className="flex items-center gap-1">
+      <div
+        className="w-2 h-2 rounded-full"
+        style={{ backgroundColor: DIFFICULTY_LEVEL[level].color }}
+      />
+      <span>{DIFFICULTY_LEVEL[level].label}</span>
     </div>
   )
 }
