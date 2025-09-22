@@ -1,4 +1,3 @@
-import { Play } from 'lucide-react'
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react'
 
 // YouTube iframe API 타입 정의
@@ -36,20 +35,23 @@ export type YouTubePlayerRef = {
 export const YouTubePlayer = forwardRef<YouTubePlayerRef, YouTubePlayerProps>(
   ({ videoId, onStateChange }, ref) => {
     const [showPlayer, setShowPlayer] = useState(false)
+    const [isPlayerReady, setIsPlayerReady] = useState(false)
     const playerRef = useRef<YTPlayer | null>(null)
     const containerRef = useRef<HTMLDivElement>(null)
 
+    // 플레이어가 준비되면 자동으로 표시
     useEffect(() => {
-      const timer = setTimeout(() => {
-        setShowPlayer(true)
-      }, 3000)
+      if (isPlayerReady) {
+        const timer = setTimeout(() => {
+          setShowPlayer(true)
+        }, 300) // 약간의 딜레이로 자연스러운 전환
 
-      return () => clearTimeout(timer)
-    }, [])
+        return () => clearTimeout(timer)
+      }
+    }, [isPlayerReady])
 
+    // YouTube API 로드 및 플레이어 초기화 (즉시 시작)
     useEffect(() => {
-      if (!showPlayer) return
-
       const loadYouTubeAPI = () => {
         const tag = document.createElement('script')
         tag.src = 'https://www.youtube.com/iframe_api'
@@ -75,6 +77,9 @@ export const YouTubePlayer = forwardRef<YouTubePlayerRef, YouTubePlayerProps>(
             fs: 0,
           },
           events: {
+            onReady: () => {
+              setIsPlayerReady(true)
+            },
             onStateChange: event => {
               onStateChange?.(event.data)
             },
@@ -91,8 +96,10 @@ export const YouTubePlayer = forwardRef<YouTubePlayerRef, YouTubePlayerProps>(
 
       return () => {
         playerRef.current?.destroy()
+        setIsPlayerReady(false)
+        setShowPlayer(false)
       }
-    }, [showPlayer, videoId, onStateChange])
+    }, [videoId, onStateChange])
 
     useImperativeHandle(ref, () => ({
       play: () => playerRef.current?.playVideo(),
@@ -105,24 +112,29 @@ export const YouTubePlayer = forwardRef<YouTubePlayerRef, YouTubePlayerProps>(
 
     return (
       <div className="relative w-full aspect-video bg-black">
-        {!showPlayer ? (
-          <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <div className="mb-4 p-4 bg-white/10 rounded-full">
-              <Play className="w-12 h-12 text-white/80 fill-white/80" />
-            </div>
-            <p className="text-white/70 text-sm text-center px-4">
-              유튜브 콘텐츠 제작자를 위한
-              <br />
-              광고가 나올 수 있습니다.
-            </p>
-          </div>
-        ) : (
-          <>
-            <div id="youtube-player" ref={containerRef} className="w-full h-full" />
-            {/* YouTube 플레이어 클릭 방지 오버레이 */}
-            <div className="absolute inset-0 z-10" />
-          </>
-        )}
+        {/* 플레이어 로딩 오버레이 */}
+        <div
+          className={`absolute inset-0 flex flex-col items-center justify-center transition-opacity duration-500 ease-in-out ${
+            showPlayer ? 'opacity-0 pointer-events-none' : 'opacity-100'
+          }`}
+        >
+          <p className="text-white/70 text-sm text-center px-4">
+            유튜브 콘텐츠 제작자를 위한
+            <br />
+            광고가 나올 수 있습니다.
+          </p>
+        </div>
+
+        {/* YouTube 플레이어 */}
+        <div
+          className={`absolute inset-0 transition-opacity duration-500 ease-in-out ${
+            showPlayer ? 'opacity-100' : 'opacity-0'
+          }`}
+        >
+          <div id="youtube-player" ref={containerRef} className="w-full h-full" />
+          {/* YouTube 플레이어 클릭 방지 오버레이 */}
+          <div className="absolute inset-0 z-10" />
+        </div>
       </div>
     )
   },
