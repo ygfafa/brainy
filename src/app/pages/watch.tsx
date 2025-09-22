@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { useParams, useSearchParams } from 'react-router'
+import { useParams } from 'react-router'
 
 import { SaveSubtitleButton } from '@/components/save-subtitle-button'
 import { VideoControls } from '@/components/youtube/video-controls'
@@ -10,7 +10,7 @@ import { timeStringToSeconds } from '@/utils/time'
 
 const WatchPage = () => {
   const { videoId } = useParams<{ videoId: string }>()
-  const [searchParams] = useSearchParams()
+  // const [searchParams] = useSearchParams()
   const playerRef = useRef<YouTubePlayerRef>(null)
   const [playerState, setPlayerState] = useState(-1)
 
@@ -47,6 +47,7 @@ const WatchPage = () => {
   return (
     <div className="min-h-screen bg-white pb-20">
       <YouTubePlayer
+        autoPlay
         ref={playerRef}
         videoId={videoId}
         startTime={timeStringToSeconds('00:17:27')}

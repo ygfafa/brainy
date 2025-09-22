@@ -21,6 +21,7 @@ type YTPlayer = {
 type YouTubePlayerProps = {
   videoId: string
   startTime?: number
+  autoPlay?: boolean
   onStateChange?: (state: number) => void
 }
 
@@ -34,7 +35,7 @@ export type YouTubePlayerRef = {
 }
 
 export const YouTubePlayer = forwardRef<YouTubePlayerRef, YouTubePlayerProps>(
-  ({ videoId, startTime, onStateChange }, ref) => {
+  ({ videoId, startTime, autoPlay = false, onStateChange }, ref) => {
     const [showPlayer, setShowPlayer] = useState(false)
     const [isPlayerReady, setIsPlayerReady] = useState(false)
     const playerRef = useRef<YTPlayer | null>(null)
@@ -66,7 +67,6 @@ export const YouTubePlayer = forwardRef<YouTubePlayerRef, YouTubePlayerProps>(
         playerRef.current = new window.YT.Player(containerRef.current.id, {
           videoId,
           playerVars: {
-            autoplay: 1,
             controls: 0,
             modestbranding: 1,
             rel: 0,
@@ -79,7 +79,12 @@ export const YouTubePlayer = forwardRef<YouTubePlayerRef, YouTubePlayerProps>(
             ...(startTime && { start: Math.floor(startTime) }),
           },
           events: {
-            onReady: () => {
+            onReady: event => {
+              if (autoPlay) {
+                // Chrome, Safari 등은 사용자 상호작용 없이 소리가 나는 동영상 자동재생을 차단
+                event.target.mute()
+                event.target.playVideo()
+              }
               setIsPlayerReady(true)
             },
             onStateChange: event => {
@@ -101,7 +106,7 @@ export const YouTubePlayer = forwardRef<YouTubePlayerRef, YouTubePlayerProps>(
         setIsPlayerReady(false)
         setShowPlayer(false)
       }
-    }, [videoId, startTime, onStateChange])
+    }, [videoId, startTime, autoPlay, onStateChange])
 
     useImperativeHandle(ref, () => ({
       play: () => playerRef.current?.playVideo(),
