@@ -20,6 +20,7 @@ type YTPlayer = {
 
 type YouTubePlayerProps = {
   videoId: string
+  startTime?: number
   onStateChange?: (state: number) => void
 }
 
@@ -33,7 +34,7 @@ export type YouTubePlayerRef = {
 }
 
 export const YouTubePlayer = forwardRef<YouTubePlayerRef, YouTubePlayerProps>(
-  ({ videoId, onStateChange }, ref) => {
+  ({ videoId, startTime, onStateChange }, ref) => {
     const [showPlayer, setShowPlayer] = useState(false)
     const [isPlayerReady, setIsPlayerReady] = useState(false)
     const playerRef = useRef<YTPlayer | null>(null)
@@ -75,6 +76,7 @@ export const YouTubePlayer = forwardRef<YouTubePlayerRef, YouTubePlayerProps>(
             playsinline: 1,
             disablekb: 1,
             fs: 0,
+            ...(startTime && { start: Math.floor(startTime) }),
           },
           events: {
             onReady: () => {
@@ -99,7 +101,7 @@ export const YouTubePlayer = forwardRef<YouTubePlayerRef, YouTubePlayerProps>(
         setIsPlayerReady(false)
         setShowPlayer(false)
       }
-    }, [videoId, onStateChange])
+    }, [videoId, startTime, onStateChange])
 
     useImperativeHandle(ref, () => ({
       play: () => playerRef.current?.playVideo(),

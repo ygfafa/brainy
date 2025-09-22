@@ -6,6 +6,7 @@ import { VideoControls } from '@/components/youtube/video-controls'
 import { YouTubePlayer, type YouTubePlayerRef } from '@/components/youtube/youtube-player'
 import { defaultSubtitles, mockSubtitles } from '@/data/mock-subtitles'
 import { useSubtitleStore } from '@/stores/subtitle-store'
+import { timeStringToSeconds } from '@/utils/time'
 
 const WatchPage = () => {
   const { videoId } = useParams<{ videoId: string }>()
@@ -45,7 +46,12 @@ const WatchPage = () => {
 
   return (
     <div className="min-h-screen bg-white pb-20">
-      <YouTubePlayer ref={playerRef} videoId={videoId} onStateChange={setPlayerState} />
+      <YouTubePlayer
+        ref={playerRef}
+        videoId={videoId}
+        startTime={timeStringToSeconds('00:17:27')}
+        onStateChange={setPlayerState}
+      />
 
       {/* 자막 담기 버튼 */}
       <SaveSubtitleButton />
