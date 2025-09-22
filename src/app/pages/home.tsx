@@ -1,6 +1,7 @@
 import { useState } from 'react'
 
 import { CategoryTabs } from '@/components/youtube/category-tabs'
+import { Header } from '@/components/youtube/header'
 import { VideoFeed } from '@/components/youtube/video-feed'
 import { mockCategories, mockVideos } from '@/data/mock-youtube-data'
 
@@ -20,7 +21,7 @@ const HomePage = () => {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* <Header /> */}
+      <Header />
       <CategoryTabs categories={categories} onCategoryClick={handleCategoryClick} />
 
       {/* 내가 담은 자막 링크 */}

@@ -7,9 +7,11 @@ export const paths = {
     path: '/watch/:videoId',
     getHref: (videoId: string) => `/watch/${videoId}`,
   },
-  savedSubtitles: {
-    path: '/saved-subtitles',
-    getHref: () => '/saved-subtitles',
+  my: {
+    dialogues: {
+      path: '/my/dialogues',
+      getHref: () => '/my/dialogues',
+    },
   },
   auth: {
     login: {

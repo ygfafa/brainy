@@ -5,7 +5,7 @@ import { SavedSubtitleCard } from '@/components/saved-subtitle-card'
 import { paths } from '@/config/paths'
 import { useSavedSubtitlesStore } from '@/stores/saved-subtitles-store'
 
-const SavedSubtitlesPage = () => {
+const MyDialoguesPage = () => {
   const { savedSubtitles } = useSavedSubtitlesStore()
   const navigate = useNavigate()
 
@@ -33,15 +33,10 @@ const SavedSubtitlesPage = () => {
           </div>
         ) : (
           <>
-            <p className="text-sm text-gray-600 mb-4">
-              총 {savedSubtitles.length}개의 자막
-            </p>
+            <p className="text-sm text-gray-600 mb-4">총 {savedSubtitles.length}개의 자막</p>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {savedSubtitles.map(savedSubtitle => (
-                <SavedSubtitleCard
-                  key={savedSubtitle.id}
-                  savedSubtitle={savedSubtitle}
-                />
+                <SavedSubtitleCard key={savedSubtitle.id} savedSubtitle={savedSubtitle} />
               ))}
             </div>
           </>
@@ -51,4 +46,4 @@ const SavedSubtitlesPage = () => {
   )
 }
 
-export default SavedSubtitlesPage
+export default MyDialoguesPage
