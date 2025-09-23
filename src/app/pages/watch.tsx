@@ -63,7 +63,7 @@ const WatchPage = () => {
         </p>
       </div>
 
-      <VideoControls playerRef={playerRef} />
+      <VideoControls playerRef={playerRef} playerState={playerState} />
     </div>
   )
 }

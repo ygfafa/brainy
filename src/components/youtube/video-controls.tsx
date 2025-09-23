@@ -7,10 +7,11 @@ import type { YouTubePlayerRef } from './youtube-player'
 
 type VideoControlsProps = {
   playerRef: React.RefObject<YouTubePlayerRef | null>
+  playerState: number
 }
 
-export const VideoControls = ({ playerRef }: VideoControlsProps) => {
-  const [isPlaying, setIsPlaying] = useState(false)
+export const VideoControls = ({ playerRef, playerState }: VideoControlsProps) => {
+  const isPlaying = playerState === 1 // YouTube Player State: 1 = PLAYING
   const [currentTime, setCurrentTime] = useState(0)
   const [duration, setDuration] = useState(0)
 
@@ -24,11 +25,8 @@ export const VideoControls = ({ playerRef }: VideoControlsProps) => {
       if (playerRef.current) {
         setCurrentTime(playerRef.current.getCurrentTime())
         setDuration(playerRef.current.getDuration())
-
-        const state = playerRef.current.getPlayerState()
-        setIsPlaying(state === 1) // 1 = PLAYING
       }
-    }, 1000)
+    }, 100) // 더 빠른 업데이트를 위해 100ms로 변경
 
     return () => clearInterval(interval)
   }, [playerRef])
@@ -38,11 +36,10 @@ export const VideoControls = ({ playerRef }: VideoControlsProps) => {
 
     if (isPlaying) {
       playerRef.current.pause()
-      setIsPlaying(false)
-    } else {
-      playerRef.current.play()
-      setIsPlaying(true)
+
+      return
     }
+    playerRef.current.play()
   }
 
   const handlePrevious = () => {
@@ -70,7 +67,7 @@ export const VideoControls = ({ playerRef }: VideoControlsProps) => {
       <div className="max-w-[640px] mx-auto">
         <div className="h-1 bg-gray-200">
           <div
-            className="h-full bg-red-600 transition-all duration-1000"
+            className="h-full bg-red-600 transition-all duration-100"
             style={{ width: `${progressPercentage}%` }}
           />
         </div>
