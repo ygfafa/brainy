@@ -7,7 +7,6 @@ import { timeStringToSeconds } from '@/utils/time'
 type SubtitleStore = {
   // 상태
   subtitles: Subtitle[]
-  currentSubtitle: Subtitle | null
   currentIndex: number
   currentTime: number
 
@@ -21,7 +20,6 @@ type SubtitleStore = {
 export const useSubtitleStore = create<SubtitleStore>((set, get) => ({
   // 초기 상태
   subtitles: [],
-  currentSubtitle: null,
   currentIndex: 0,
   currentTime: 0,
 
@@ -39,7 +37,7 @@ export const useSubtitleStore = create<SubtitleStore>((set, get) => ({
     })
 
     if (newIndex !== -1 && newIndex !== currentIndex) {
-      set({ currentIndex: newIndex, currentSubtitle: subtitles[newIndex] })
+      set({ currentIndex: newIndex })
     }
   },
 

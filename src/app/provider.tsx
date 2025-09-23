@@ -1,5 +1,4 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import * as React from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { HelmetProvider } from 'react-helmet-async'
@@ -32,7 +31,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
       <ErrorBoundary FallbackComponent={() => <div>Root Error Fallback</div>}>
         <HelmetProvider>
           <QueryClientProvider client={queryClient}>
-            {import.meta.env.DEV && <ReactQueryDevtools />}
+            {/* {import.meta.env.DEV && <ReactQueryDevtools />} */}
             <Toaster position="bottom-center" richColors expand />
             <MobileOnlyLayout>{children}</MobileOnlyLayout>
           </QueryClientProvider>

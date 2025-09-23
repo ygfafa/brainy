@@ -15,8 +15,7 @@ const WatchPage = () => {
   const playerRef = useRef<YouTubePlayerRef>(null)
   const [playerState, setPlayerState] = useState(-1)
 
-  const { setSubtitles, subtitles, currentIndex, syncWithTime, currentSubtitle } =
-    useSubtitleStore()
+  const { setSubtitles, subtitles, currentIndex, syncWithTime } = useSubtitleStore()
 
   const { currentTime } = useSyncVideoTime({ playerRef, playerState })
 
@@ -34,6 +33,8 @@ const WatchPage = () => {
   if (!videoId) {
     return <div className="p-4">비디오를 찾을 수 없습니다.</div>
   }
+
+  const currentSubtitle = subtitles[currentIndex]
 
   return (
     <div className="min-h-screen bg-white pb-20">
@@ -53,9 +54,7 @@ const WatchPage = () => {
         {currentSubtitle && (
           <div className="bg-gray-50 rounded-lg p-4 mb-4">
             <p className="text-lg font-medium mb-2">{currentSubtitle.text}</p>
-            {/* {isTranslationActive && (
-              <p className="text-sm text-gray-600">{currentSubtitle.translation}</p>
-            )} */}
+            <p className="text-sm text-gray-600">{currentSubtitle.translation}</p>
           </div>
         )}
         <p className="text-xs text-gray-500">
