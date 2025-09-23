@@ -20,7 +20,7 @@ type YTPlayer = {
 
 type YouTubePlayerProps = {
   videoId: string
-  startTime?: number
+  initialTime?: number
   autoPlay?: boolean
   onStateChange?: (state: number) => void
 }
@@ -35,7 +35,7 @@ export type YouTubePlayerRef = {
 }
 
 export const YouTubePlayer = forwardRef<YouTubePlayerRef, YouTubePlayerProps>(
-  ({ videoId, startTime, autoPlay = false, onStateChange }, ref) => {
+  ({ videoId, initialTime, autoPlay = false, onStateChange }, ref) => {
     const [showPlayer, setShowPlayer] = useState(false)
     const [isPlayerReady, setIsPlayerReady] = useState(false)
     const playerRef = useRef<YTPlayer | null>(null)
@@ -76,13 +76,13 @@ export const YouTubePlayer = forwardRef<YouTubePlayerRef, YouTubePlayerProps>(
             playsinline: 1,
             disablekb: 1,
             fs: 0,
-            ...(startTime && { start: Math.floor(startTime) }),
+            ...(initialTime && { start: Math.floor(initialTime) }),
           },
           events: {
             onReady: event => {
               if (autoPlay) {
                 // Chrome, Safari 등은 사용자 상호작용 없이 소리가 나는 동영상 자동재생을 차단
-                event.target.mute()
+                // event.target.mute()
                 event.target.playVideo()
               }
               setIsPlayerReady(true)
@@ -106,7 +106,7 @@ export const YouTubePlayer = forwardRef<YouTubePlayerRef, YouTubePlayerProps>(
         setIsPlayerReady(false)
         setShowPlayer(false)
       }
-    }, [videoId, startTime, autoPlay, onStateChange])
+    }, [videoId, initialTime, autoPlay, onStateChange])
 
     useImperativeHandle(ref, () => ({
       play: () => playerRef.current?.playVideo(),
@@ -120,11 +120,7 @@ export const YouTubePlayer = forwardRef<YouTubePlayerRef, YouTubePlayerProps>(
     return (
       <div className="relative w-full aspect-video bg-black">
         {/* 플레이어 로딩 오버레이 */}
-        <div
-          className={`absolute inset-0 flex flex-col items-center justify-center transition-opacity duration-500 ease-in-out ${
-            showPlayer ? 'opacity-0 pointer-events-none' : 'opacity-100'
-          }`}
-        >
+        <div className={`absolute inset-0 flex flex-col items-center justify-center`}>
           <p className="text-white/70 text-sm text-center px-4">
             유튜브 콘텐츠 제작자를 위한
             <br />
@@ -140,7 +136,7 @@ export const YouTubePlayer = forwardRef<YouTubePlayerRef, YouTubePlayerProps>(
         >
           <div id="youtube-player" ref={containerRef} className="w-full h-full" />
           {/* YouTube 플레이어 클릭 방지 오버레이 */}
-          <div className="absolute inset-0 z-10" />
+          {/* <div className="absolute inset-0 z-10" /> */}
         </div>
       </div>
     )

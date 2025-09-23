@@ -11,4 +11,4 @@ export const mockVideos: Video[] = [
     level: 1,
     duration: '2:25:02',
   },
-]
+] as const
