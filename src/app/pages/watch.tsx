@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router'
+import { toast } from 'sonner'
 
 import { SaveSubtitleButton } from '@/components/save-subtitle-button'
 import { VideoController } from '@/components/video-controller'
 import { VideoSubtitles } from '@/components/video-subtitles'
 import { YouTubePlayer, type YouTubePlayerRef } from '@/components/youtube-player'
 import { defaultSubtitles, mockSubtitles } from '@/data/mock-subtitles'
+import { useSavedSubtitlesStore } from '@/stores/saved-subtitles-store'
 import { useSubtitleStore } from '@/stores/subtitle-store'
 import { timeStringToSeconds } from '@/utils/time'
 
@@ -26,6 +28,14 @@ const WatchPage = () => {
     prevSubtitle,
     nextSubtitle,
   } = useSubtitleStore()
+  const { addSubtitle, removeSubtitle, getSavedSubtitle } = useSavedSubtitlesStore()
+
+  const currentSubtitle = subtitles[currentIndex]
+
+  const savedSubtitle = currentSubtitle
+    ? getSavedSubtitle(videoId!, subtitles[currentIndex].id)
+    : undefined
+  const isSaved = !!savedSubtitle
 
   const handleTimeUpdate = (time: number) => {
     setCurrentTime(time)
@@ -50,6 +60,21 @@ const WatchPage = () => {
 
   const handleNext = () => {
     nextSubtitle(playerRef.current)
+  }
+
+  const handleSaveSubtitle = () => {
+    if (isSaved && savedSubtitle) {
+      removeSubtitle(savedSubtitle.id)
+      toast('자막이 장바구니에서 제거되었습니다')
+    } else {
+      addSubtitle(videoId!, currentSubtitle)
+      toast('자막이 장바구니에 담겼습니다', {
+        // action: {
+        //   label: '보러가기',
+        //   onClick: () => navigate('/saved-subtitles'),
+        // },
+      })
+    }
   }
 
   useEffect(() => {
@@ -84,8 +109,6 @@ const WatchPage = () => {
     return <div className="p-4">비디오를 찾을 수 없습니다.</div>
   }
 
-  const currentSubtitle = subtitles[currentIndex]
-
   return (
     <div className="min-h-screen bg-white pb-20">
       <YouTubePlayer
@@ -98,7 +121,7 @@ const WatchPage = () => {
       />
 
       {/* 자막 담기 버튼 */}
-      <SaveSubtitleButton />
+      <SaveSubtitleButton onClick={handleSaveSubtitle} isSaved={isSaved} />
 
       {/* 현재 자막 표시 */}
       <VideoSubtitles data={currentSubtitle} />

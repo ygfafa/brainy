@@ -1,41 +1,13 @@
 import { ShoppingCart } from 'lucide-react'
-import { useParams } from 'react-router'
-import { toast } from 'sonner'
 
-import { useSavedSubtitlesStore } from '@/stores/saved-subtitles-store'
-import { useSubtitleStore } from '@/stores/subtitle-store'
-
-export const SaveSubtitleButton = () => {
-  const { videoId } = useParams<{ videoId: string }>()
-  // const navigate = useNavigate()
-  const { subtitles, currentIndex } = useSubtitleStore()
-  const { addSubtitle, removeSubtitle, getSavedSubtitle } = useSavedSubtitlesStore()
-
-  const currentSubtitle = subtitles[currentIndex]
-
-  if (!currentSubtitle || !videoId) return null
-
-  const savedSubtitle = getSavedSubtitle(videoId, currentSubtitle.id)
-  const isSaved = !!savedSubtitle
-
-  const handleClick = () => {
-    if (isSaved && savedSubtitle) {
-      removeSubtitle(savedSubtitle.id)
-      toast('자막이 장바구니에서 제거되었습니다')
-    } else {
-      addSubtitle(videoId, currentSubtitle)
-      toast('자막이 장바구니에 담겼습니다', {
-        // action: {
-        //   label: '보러가기',
-        //   onClick: () => navigate('/saved-subtitles'),
-        // },
-      })
-    }
-  }
-
+type SaveSubtitleButtonProps = {
+  onClick: () => void
+  isSaved: boolean
+}
+export const SaveSubtitleButton = ({ onClick, isSaved }: SaveSubtitleButtonProps) => {
   return (
     <button
-      onClick={handleClick}
+      onClick={onClick}
       className={`fixed bottom-[72px] left-1/2 -translate-x-1/2 p-3 rounded-full shadow-lg transition-all z-40 ${
         isSaved
           ? 'bg-blue-500 text-white hover:bg-blue-600'
