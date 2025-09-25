@@ -23,6 +23,7 @@ type YouTubePlayerProps = {
   initialTime?: number
   autoPlay?: boolean
   onStateChange?: (state: number) => void
+  onTimeUpdate?: (time: number) => void
 }
 
 export type YouTubePlayerRef = {
@@ -35,11 +36,35 @@ export type YouTubePlayerRef = {
 }
 
 export const YouTubePlayer = forwardRef<YouTubePlayerRef, YouTubePlayerProps>(
-  ({ videoId, initialTime, autoPlay = false, onStateChange }, ref) => {
+  ({ videoId, initialTime, autoPlay = false, onStateChange, onTimeUpdate }, ref) => {
     const [showPlayer, setShowPlayer] = useState(false)
     const [isPlayerReady, setIsPlayerReady] = useState(false)
     const playerRef = useRef<YTPlayer | null>(null)
     const containerRef = useRef<HTMLDivElement>(null)
+    const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
+
+    const startTimeTracking = () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current)
+      }
+
+      // 100ms마다 현재 시간 업데이트 (더 부드러운 추적)
+      intervalRef.current = setInterval(() => {
+        if (playerRef.current && typeof playerRef.current.getCurrentTime === 'function') {
+          const time = playerRef.current.getCurrentTime()
+
+          // 커스텀 시간 변화 이벤트 호출
+          onTimeUpdate?.(time)
+        }
+      }, 100)
+    }
+
+    const stopTimeTracking = () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current)
+        intervalRef.current = null
+      }
+    }
 
     // 플레이어가 준비되면 자동으로 표시
     useEffect(() => {
@@ -88,6 +113,14 @@ export const YouTubePlayer = forwardRef<YouTubePlayerRef, YouTubePlayerProps>(
               setIsPlayerReady(true)
             },
             onStateChange: event => {
+              // 재생 중일 때만 시간 추적 시작
+              if (event.data === 1) {
+                // playing
+                startTimeTracking()
+              } else {
+                stopTimeTracking()
+              }
+
               onStateChange?.(event.data)
             },
           },
@@ -106,6 +139,7 @@ export const YouTubePlayer = forwardRef<YouTubePlayerRef, YouTubePlayerProps>(
         setIsPlayerReady(false)
         setShowPlayer(false)
       }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [videoId, initialTime, autoPlay, onStateChange])
 
     useImperativeHandle(ref, () => ({

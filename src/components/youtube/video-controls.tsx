@@ -1,24 +1,34 @@
 import { Pause, Play, Repeat, SkipBack, SkipForward } from 'lucide-react'
+import { useEffect } from 'react'
 
-import { useSubtitleRepeat } from '@/hooks/use-subtitle-repeat'
-import { useSyncVideoTime } from '@/hooks/use-sync-video-time'
 import { useSubtitleStore } from '@/stores/subtitle-store'
+import { timeStringToSeconds } from '@/utils/time'
 
 import type { YouTubePlayerRef } from './youtube-player'
 
 type VideoControlsProps = {
   playerRef: React.RefObject<YouTubePlayerRef | null>
   playerState: number
+  currentTime: number
 }
 
-export const VideoControls = ({ playerRef, playerState }: VideoControlsProps) => {
+export const VideoControls = ({ playerRef, playerState, currentTime }: VideoControlsProps) => {
   const isPlaying = playerState === 1 // YouTube Player State: 1 = PLAYING
 
   const { currentIndex, subtitles, nextSubtitle, prevSubtitle, isRepeatMode, toggleRepeatMode } =
     useSubtitleStore()
-  const { currentTime } = useSyncVideoTime({ playerRef, playerState })
 
-  useSubtitleRepeat({ playerRef })
+  // useSubtitleRepeat({ playerRef, currentTime })
+
+  useEffect(() => {
+    if (!playerRef.current || subtitles.length === 0) return
+    const endTime = timeStringToSeconds(subtitles[currentIndex].endTime)
+    console.log(currentTime, endTime)
+    if (currentTime >= endTime) {
+      // alert('?')
+      playerRef.current?.seekTo(timeStringToSeconds(subtitles[currentIndex].startTime))
+    }
+  }, [currentTime, currentIndex, subtitles, playerRef])
 
   const hasPrevSubtitle = currentIndex > 0
   const hasNextSubtitle = currentIndex < subtitles.length - 1

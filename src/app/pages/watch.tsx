@@ -5,7 +5,6 @@ import { HighlightedText } from '@/components/ui/highlighted-text'
 import { VideoControls } from '@/components/youtube/video-controls'
 import { YouTubePlayer, type YouTubePlayerRef } from '@/components/youtube/youtube-player'
 import { defaultSubtitles, mockSubtitles } from '@/data/mock-subtitles'
-import { useSyncVideoTime } from '@/hooks/use-sync-video-time'
 import { useSubtitleStore } from '@/stores/subtitle-store'
 import { timeStringToSeconds } from '@/utils/time'
 
@@ -14,14 +13,14 @@ const WatchPage = () => {
   // const [searchParams] = useSearchParams()
   const playerRef = useRef<YouTubePlayerRef>(null)
   const [playerState, setPlayerState] = useState(-1)
+  const [currentTime, setCurrentTime] = useState(0)
 
   const { setSubtitles, subtitles, currentIndex, syncWithTime } = useSubtitleStore()
 
-  const { currentTime } = useSyncVideoTime({ playerRef, playerState })
-
-  useEffect(() => {
-    syncWithTime(currentTime)
-  }, [currentTime, syncWithTime])
+  const handleTimeUpdate = (time: number) => {
+    setCurrentTime(time)
+    syncWithTime(time)
+  }
 
   useEffect(() => {
     if (videoId) {
@@ -46,6 +45,7 @@ const WatchPage = () => {
         videoId={videoId}
         initialTime={timeStringToSeconds(subtitles[0]?.startTime || '00:00:00')}
         onStateChange={setPlayerState}
+        onTimeUpdate={handleTimeUpdate}
       />
 
       {/* 자막 담기 버튼 */}
@@ -69,7 +69,7 @@ const WatchPage = () => {
         )}
       </div>
 
-      <VideoControls playerRef={playerRef} playerState={playerState} />
+      <VideoControls playerRef={playerRef} playerState={playerState} currentTime={currentTime} />
     </div>
   )
 }

@@ -8,7 +8,6 @@ type SubtitleStore = {
   // 상태
   subtitles: Subtitle[]
   currentIndex: number
-  currentTime: number
   isRepeatMode: boolean
 
   // 액션
@@ -17,21 +16,19 @@ type SubtitleStore = {
   nextSubtitle: (playerRef?: YouTubePlayerRef | null) => void
   prevSubtitle: (playerRef?: YouTubePlayerRef | null) => void
   toggleRepeatMode: () => void
-  checkAndRepeat: (time: number, playerRef?: YouTubePlayerRef | null) => void
 }
 
 export const useSubtitleStore = create<SubtitleStore>((set, get) => ({
   // 초기 상태
   subtitles: [],
   currentIndex: 0,
-  currentTime: 0,
   isRepeatMode: false,
 
   // 액션 구현
   setSubtitles: subtitles => set({ subtitles }),
 
   syncWithTime: time => {
-    const { subtitles, currentIndex } = get()
+    const { subtitles, currentIndex, isRepeatMode } = get()
 
     const newIndex = subtitles.findIndex(subtitle => {
       return (
@@ -39,6 +36,13 @@ export const useSubtitleStore = create<SubtitleStore>((set, get) => ({
         time < timeStringToSeconds(subtitle.endTime)
       )
     })
+
+    console.log(isRepeatMode)
+
+    if (isRepeatMode) {
+      set({ currentIndex })
+      return
+    }
 
     if (newIndex !== -1 && newIndex !== currentIndex) {
       set({ currentIndex: newIndex })
@@ -71,18 +75,5 @@ export const useSubtitleStore = create<SubtitleStore>((set, get) => ({
 
   toggleRepeatMode: () => {
     set(state => ({ isRepeatMode: !state.isRepeatMode }))
-  },
-
-  checkAndRepeat: (time, playerRef) => {
-    const { isRepeatMode, currentIndex, subtitles } = get()
-
-    if (!isRepeatMode || !playerRef || currentIndex >= subtitles.length) return
-
-    const currentSubtitle = subtitles[currentIndex]
-    const endTime = timeStringToSeconds(currentSubtitle.endTime)
-
-    if (time >= endTime) {
-      playerRef.seekTo(timeStringToSeconds(currentSubtitle.startTime))
-    }
   },
 }))
