@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router'
 
 import { SaveSubtitleButton } from '@/components/save-subtitle-button'
+import { HighlightedText } from '@/components/ui/highlighted-text'
 import { VideoControls } from '@/components/youtube/video-controls'
 import { YouTubePlayer, type YouTubePlayerRef } from '@/components/youtube/youtube-player'
 import { defaultSubtitles, mockSubtitles } from '@/data/mock-subtitles'
@@ -36,6 +37,8 @@ const WatchPage = () => {
 
   const currentSubtitle = subtitles[currentIndex]
 
+  const hasCommentary = !!currentSubtitle?.commentary
+
   return (
     <div className="min-h-screen bg-white pb-20">
       <YouTubePlayer
@@ -47,19 +50,24 @@ const WatchPage = () => {
       />
 
       {/* 자막 담기 버튼 */}
-      <SaveSubtitleButton />
+      {/* <SaveSubtitleButton /> */}
 
       {/* 현재 자막 표시 */}
       <div className="p-4">
         {currentSubtitle && (
-          <div className="bg-gray-50 rounded-lg p-4 mb-4">
-            <p className="text-lg font-medium mb-2">{currentSubtitle.text}</p>
+          <div className="">
+            <HighlightedText
+              text={currentSubtitle.text}
+              className="text-lg font-medium mb-2 block"
+            />
             <p className="text-sm text-gray-600">{currentSubtitle.translation}</p>
+            {hasCommentary && (
+              <div className="mt-4">
+                <p className="text-sm text-gray-600">{currentSubtitle.commentary}</p>
+              </div>
+            )}
           </div>
         )}
-        <p className="text-xs text-gray-500">
-          {currentIndex + 1} / {subtitles.length} 자막
-        </p>
       </div>
 
       <VideoControls playerRef={playerRef} playerState={playerState} />

@@ -4,4 +4,5 @@ export type Subtitle = {
   endTime: string
   text: string // 원문
   translation: string // 번역
+  commentary?: string // 코멘트
 }
