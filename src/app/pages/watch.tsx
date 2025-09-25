@@ -4,7 +4,6 @@ import { useParams } from 'react-router'
 import { VideoController } from '@/components/video-controller'
 import { VideoSubtitles } from '@/components/video-subtitles'
 import { YouTubePlayer, type YouTubePlayerRef } from '@/components/youtube-player'
-import { YouTubePlayerV2 } from '@/components/youtube-playerv2'
 import { defaultSubtitles, mockSubtitles } from '@/data/mock-subtitles'
 import { useSubtitleStore } from '@/stores/subtitle-store'
 import { timeStringToSeconds } from '@/utils/time'
@@ -88,7 +87,7 @@ const WatchPage = () => {
 
   return (
     <div className="min-h-screen bg-white pb-20">
-      <YouTubePlayerV2
+      <YouTubePlayer
         autoPlay
         ref={playerRef}
         videoId={videoId}
