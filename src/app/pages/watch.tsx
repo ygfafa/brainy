@@ -4,6 +4,7 @@ import { useParams } from 'react-router'
 import { VideoController } from '@/components/video-controller'
 import { VideoSubtitles } from '@/components/video-subtitles'
 import { YouTubePlayer, type YouTubePlayerRef } from '@/components/youtube-player'
+import { YouTubePlayerV2 } from '@/components/youtube-playerv2'
 import { defaultSubtitles, mockSubtitles } from '@/data/mock-subtitles'
 import { useSubtitleStore } from '@/stores/subtitle-store'
 import { timeStringToSeconds } from '@/utils/time'
@@ -87,7 +88,7 @@ const WatchPage = () => {
 
   return (
     <div className="min-h-screen bg-white pb-20">
-      <YouTubePlayer
+      <YouTubePlayerV2
         autoPlay
         ref={playerRef}
         videoId={videoId}
@@ -95,6 +96,14 @@ const WatchPage = () => {
         onStateChange={setPlayerState}
         onTimeUpdate={handleTimeUpdate}
       />
+      {/* <YouTubePlayerV2
+        autoPlay
+        ref={playerRef}
+        videoId={videoId}
+        initialTime={timeStringToSeconds(subtitles[0]?.startTime || '00:00:00')}
+        onStateChange={setPlayerState}
+        onTimeUpdate={handleTimeUpdate}
+      /> */}
 
       {/* 자막 담기 버튼 */}
       {/* <SaveSubtitleButton /> */}

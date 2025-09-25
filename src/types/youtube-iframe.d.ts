@@ -26,6 +26,7 @@ declare namespace YT {
         events?: {
           onReady?: (event: YT.PlayerEvent) => void
           onStateChange?: (event: YT.OnStateChangeEvent) => void
+          onError?: (event: YT.OnErrorEvent) => void
         }
       },
     )
@@ -37,6 +38,7 @@ declare namespace YT {
     getPlayerState(): number
     getCurrentTime(): number
     getDuration(): number
+    getPlayerState(): number
     getVideoLoadedFraction(): number
     mute(): void
     unMute(): void

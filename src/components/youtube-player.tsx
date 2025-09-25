@@ -35,6 +35,48 @@ export type YouTubePlayerRef = {
   seekTo: (seconds: number) => void
 }
 
+let apiLoadingPromise: Promise<void> | null = null
+
+const loadYouTubeAPI = (): Promise<void> => {
+  // 이미 로딩 중이거나 로드된 경우
+  if (apiLoadingPromise) return apiLoadingPromise
+  if (window.YT) return Promise.resolve()
+
+  apiLoadingPromise = new Promise((resolve, reject) => {
+    // 이미 스크립트가 있는지 확인
+    const existingScript = document.querySelector('script[src*="youtube.com/iframe_api"]')
+    if (existingScript) {
+      // 이미 로딩 중인 스크립트가 있으면 대기
+      const checkYT = setInterval(() => {
+        if (window.YT) {
+          clearInterval(checkYT)
+          resolve()
+        }
+      }, 100)
+
+      // 10초 후 타임아웃
+      setTimeout(() => {
+        clearInterval(checkYT)
+        reject(new Error('YouTube API loading timeout'))
+      }, 10000)
+      return
+    }
+
+    const tag = document.createElement('script')
+    tag.src = 'https://www.youtube.com/iframe_api'
+    tag.onerror = () => reject(new Error('Failed to load YouTube API'))
+
+    const firstScriptTag = document.getElementsByTagName('script')[0]
+    firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag)
+
+    window.onYouTubeIframeAPIReady = () => {
+      resolve()
+    }
+  })
+
+  return apiLoadingPromise
+}
+
 export const YouTubePlayer = forwardRef<YouTubePlayerRef, YouTubePlayerProps>(
   ({ videoId, initialTime, autoPlay = false, onStateChange, onTimeUpdate }, ref) => {
     const [showPlayer, setShowPlayer] = useState(false)
@@ -79,13 +121,6 @@ export const YouTubePlayer = forwardRef<YouTubePlayerRef, YouTubePlayerProps>(
 
     // YouTube API 로드 및 플레이어 초기화 (즉시 시작)
     useEffect(() => {
-      const loadYouTubeAPI = () => {
-        const tag = document.createElement('script')
-        tag.src = 'https://www.youtube.com/iframe_api'
-        const firstScriptTag = document.getElementsByTagName('script')[0]
-        firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag)
-      }
-
       const initPlayer = () => {
         if (!containerRef.current) return
 
@@ -125,6 +160,7 @@ export const YouTubePlayer = forwardRef<YouTubePlayerRef, YouTubePlayerProps>(
             },
           },
         })
+        console.log('## v1:', playerRef.current)
       }
 
       if (!window.YT) {
@@ -143,7 +179,10 @@ export const YouTubePlayer = forwardRef<YouTubePlayerRef, YouTubePlayerProps>(
     }, [videoId, initialTime, autoPlay, onStateChange])
 
     useImperativeHandle(ref, () => ({
-      play: () => playerRef.current?.playVideo(),
+      play: () => {
+        console.log(playerRef.current)
+        playerRef.current?.playVideo()
+      },
       pause: () => playerRef.current?.pauseVideo(),
       getCurrentTime: () => playerRef.current?.getCurrentTime() || 0,
       getDuration: () => playerRef.current?.getDuration() || 0,
