@@ -23,7 +23,6 @@ export const VideoControls = ({ playerRef, playerState, currentTime }: VideoCont
   useEffect(() => {
     if (!playerRef.current || subtitles.length === 0) return
     const endTime = timeStringToSeconds(subtitles[currentIndex].endTime)
-    console.log(currentTime, endTime)
     if (currentTime >= endTime) {
       // alert('?')
       playerRef.current?.seekTo(timeStringToSeconds(subtitles[currentIndex].startTime))
@@ -56,7 +55,7 @@ export const VideoControls = ({ playerRef, playerState, currentTime }: VideoCont
     }
   }
 
-  const duration = playerRef.current?.getDuration() || 0
+  const duration = playerRef.current?.getDuration?.() || 0
   const progressPercentage = duration > 0 ? (currentTime / duration) * 100 : 0
 
   return (

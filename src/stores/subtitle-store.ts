@@ -37,8 +37,6 @@ export const useSubtitleStore = create<SubtitleStore>((set, get) => ({
       )
     })
 
-    console.log(isRepeatMode)
-
     if (isRepeatMode) {
       set({ currentIndex })
       return
