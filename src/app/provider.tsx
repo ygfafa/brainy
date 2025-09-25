@@ -32,7 +32,20 @@ export const AppProvider = ({ children }: AppProviderProps) => {
         <HelmetProvider>
           <QueryClientProvider client={queryClient}>
             {/* {import.meta.env.DEV && <ReactQueryDevtools />} */}
-            <Toaster position="bottom-center" richColors expand />
+            <Toaster
+              position="bottom-center"
+              expand
+              toastOptions={{
+                style: {
+                  borderRadius: '12px',
+                  background: 'rgba(58, 64, 71, 0.85)',
+                  backdropFilter: 'blur(2px)',
+                  color: '#fff',
+                  fontSize: '16px',
+                  fontWeight: 500,
+                },
+              }}
+            />
             <MobileOnlyLayout>{children}</MobileOnlyLayout>
           </QueryClientProvider>
         </HelmetProvider>

@@ -31,7 +31,7 @@ export const VideoController = ({
           />
         </div> */}
 
-        <div className="relative flex items-center justify-between py-4 px-8">
+        <div className="relative flex items-center justify-between py-2 px-8">
           <div />
           <div className="absolute left-1/2 -translate-x-1/2 flex items-center gap-2">
             {/* 이전 자막 버튼 */}

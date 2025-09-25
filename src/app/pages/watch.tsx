@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router'
 
+import { SaveSubtitleButton } from '@/components/save-subtitle-button'
 import { VideoController } from '@/components/video-controller'
 import { VideoSubtitles } from '@/components/video-subtitles'
 import { YouTubePlayer, type YouTubePlayerRef } from '@/components/youtube-player'
@@ -74,7 +75,7 @@ const WatchPage = () => {
     const isLastSubtitle = currentIndex === subtitles.length - 1
     if (isLastSubtitle && currentTime >= endTime) {
       playerRef.current?.pause()
-      alert('영상 끝!')
+      console.log('영상 끝!')
       return
     }
   }, [currentTime, currentIndex, subtitles, playerRef])
@@ -97,7 +98,7 @@ const WatchPage = () => {
       />
 
       {/* 자막 담기 버튼 */}
-      {/* <SaveSubtitleButton /> */}
+      <SaveSubtitleButton />
 
       {/* 현재 자막 표시 */}
       <VideoSubtitles data={currentSubtitle} />
