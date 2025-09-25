@@ -1,5 +1,6 @@
-import { Pause, Play, SkipBack, SkipForward } from 'lucide-react'
+import { Pause, Play, Repeat, SkipBack, SkipForward } from 'lucide-react'
 
+import { useSubtitleRepeat } from '@/hooks/use-subtitle-repeat'
 import { useSyncVideoTime } from '@/hooks/use-sync-video-time'
 import { useSubtitleStore } from '@/stores/subtitle-store'
 
@@ -13,8 +14,11 @@ type VideoControlsProps = {
 export const VideoControls = ({ playerRef, playerState }: VideoControlsProps) => {
   const isPlaying = playerState === 1 // YouTube Player State: 1 = PLAYING
 
-  const { currentIndex, subtitles, nextSubtitle, prevSubtitle } = useSubtitleStore()
+  const { currentIndex, subtitles, nextSubtitle, prevSubtitle, isRepeatMode, toggleRepeatMode } =
+    useSubtitleStore()
   const { currentTime } = useSyncVideoTime({ playerRef, playerState })
+
+  useSubtitleRepeat({ playerRef })
 
   const hasPrevSubtitle = currentIndex > 0
   const hasNextSubtitle = currentIndex < subtitles.length - 1
@@ -55,8 +59,9 @@ export const VideoControls = ({ playerRef, playerState }: VideoControlsProps) =>
           />
         </div>
 
-        <div className="flex items-center justify-center p-4">
-          <div className="flex items-center gap-2">
+        <div className="relative flex items-center justify-between py-4 px-8">
+          <div />
+          <div className="absolute left-1/2 -translate-x-1/2 flex items-center gap-2">
             {/* 이전 자막 버튼 */}
             <button
               onClick={handlePrevious}
@@ -79,7 +84,17 @@ export const VideoControls = ({ playerRef, playerState }: VideoControlsProps) =>
             >
               <SkipForward className="w-6 h-6" />
             </button>
+
+            {/* 구간 반복 버튼 */}
           </div>
+          <button
+            onClick={toggleRepeatMode}
+            className={`p-2 rounded-full transition-colors ${
+              isRepeatMode ? 'text-emerald-600' : 'text-gray-600'
+            }`}
+          >
+            <Repeat className="w-6 h-6" />
+          </button>
         </div>
       </div>
     </div>

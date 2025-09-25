@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router'
 
-import { SaveSubtitleButton } from '@/components/save-subtitle-button'
 import { HighlightedText } from '@/components/ui/highlighted-text'
 import { VideoControls } from '@/components/youtube/video-controls'
 import { YouTubePlayer, type YouTubePlayerRef } from '@/components/youtube/youtube-player'
