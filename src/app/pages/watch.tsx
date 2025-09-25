@@ -73,8 +73,8 @@ const WatchPage = () => {
     const endTime = timeStringToSeconds(subtitles[currentIndex].endTime)
     const isLastSubtitle = currentIndex === subtitles.length - 1
     if (isLastSubtitle && currentTime >= endTime) {
-      alert('영상 끝!')
       playerRef.current?.pause()
+      alert('영상 끝!')
       return
     }
   }, [currentTime, currentIndex, subtitles, playerRef])
@@ -95,14 +95,6 @@ const WatchPage = () => {
         onStateChange={setPlayerState}
         onTimeUpdate={handleTimeUpdate}
       />
-      {/* <YouTubePlayerV2
-        autoPlay
-        ref={playerRef}
-        videoId={videoId}
-        initialTime={timeStringToSeconds(subtitles[0]?.startTime || '00:00:00')}
-        onStateChange={setPlayerState}
-        onTimeUpdate={handleTimeUpdate}
-      /> */}
 
       {/* 자막 담기 버튼 */}
       {/* <SaveSubtitleButton /> */}
