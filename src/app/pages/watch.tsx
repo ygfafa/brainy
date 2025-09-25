@@ -3,6 +3,7 @@ import { useParams } from 'react-router'
 
 import { HighlightedText } from '@/components/ui/highlighted-text'
 import { VideoControls } from '@/components/video-controls'
+import { VideoSubtitles } from '@/components/video-subtitles'
 import { YouTubePlayer, type YouTubePlayerRef } from '@/components/youtube-player'
 import { defaultSubtitles, mockSubtitles } from '@/data/mock-subtitles'
 import { useSubtitleStore } from '@/stores/subtitle-store'
@@ -35,8 +36,6 @@ const WatchPage = () => {
 
   const currentSubtitle = subtitles[currentIndex]
 
-  const hasCommentary = !!currentSubtitle?.commentary
-
   return (
     <div className="min-h-screen bg-white pb-20">
       <YouTubePlayer
@@ -52,23 +51,7 @@ const WatchPage = () => {
       {/* <SaveSubtitleButton /> */}
 
       {/* 현재 자막 표시 */}
-      <div className="p-4">
-        {currentSubtitle && (
-          <div className="">
-            <HighlightedText
-              text={currentSubtitle.text}
-              className="text-lg font-medium mb-2 block"
-            />
-            <p className="text-sm text-gray-600">{currentSubtitle.translation}</p>
-            {hasCommentary && (
-              <div className="mt-4">
-                <p className="text-sm text-gray-600">{currentSubtitle.commentary}</p>
-              </div>
-            )}
-          </div>
-        )}
-      </div>
-
+      <VideoSubtitles data={currentSubtitle} />
       <VideoControls playerRef={playerRef} playerState={playerState} currentTime={currentTime} />
     </div>
   )
