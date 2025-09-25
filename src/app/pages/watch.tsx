@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router'
 
-import { HighlightedText } from '@/components/ui/highlighted-text'
-import { VideoControls } from '@/components/video-controls'
+import { VideoController } from '@/components/video-controller'
 import { VideoSubtitles } from '@/components/video-subtitles'
 import { YouTubePlayer, type YouTubePlayerRef } from '@/components/youtube-player'
 import { defaultSubtitles, mockSubtitles } from '@/data/mock-subtitles'
@@ -16,11 +15,40 @@ const WatchPage = () => {
   const [playerState, setPlayerState] = useState(-1)
   const [currentTime, setCurrentTime] = useState(0)
 
-  const { setSubtitles, subtitles, currentIndex, syncWithTime } = useSubtitleStore()
+  const {
+    setSubtitles,
+    subtitles,
+    currentIndex,
+    syncWithTime,
+    isRepeatMode,
+    toggleRepeatMode,
+    prevSubtitle,
+    nextSubtitle,
+  } = useSubtitleStore()
 
   const handleTimeUpdate = (time: number) => {
     setCurrentTime(time)
     syncWithTime(time)
+  }
+
+  const handleTogglePlay = () => {
+    if (playerState === 1) {
+      playerRef.current?.pause()
+    } else {
+      playerRef.current?.play()
+    }
+  }
+
+  const handleToggleRepeat = () => {
+    toggleRepeatMode()
+  }
+
+  const handlePrevious = () => {
+    prevSubtitle(playerRef.current)
+  }
+
+  const handleNext = () => {
+    nextSubtitle(playerRef.current)
   }
 
   useEffect(() => {
@@ -29,6 +57,14 @@ const WatchPage = () => {
       setSubtitles(videoSubtitles)
     }
   }, [videoId, setSubtitles])
+
+  useEffect(() => {
+    if (!playerRef.current || subtitles.length === 0) return
+    const endTime = timeStringToSeconds(subtitles[currentIndex].endTime)
+    if (currentTime >= endTime) {
+      playerRef.current?.seekTo(timeStringToSeconds(subtitles[currentIndex].startTime))
+    }
+  }, [currentTime, currentIndex, subtitles, playerRef])
 
   if (!videoId) {
     return <div className="p-4">비디오를 찾을 수 없습니다.</div>
@@ -52,7 +88,16 @@ const WatchPage = () => {
 
       {/* 현재 자막 표시 */}
       <VideoSubtitles data={currentSubtitle} />
-      <VideoControls playerRef={playerRef} playerState={playerState} currentTime={currentTime} />
+      <VideoController
+        isPlaying={playerState === 1}
+        isRepeatMode={isRepeatMode}
+        hasPrevSubtitle={currentIndex > 0}
+        hasNextSubtitle={currentIndex < subtitles.length - 1}
+        togglePlay={handleTogglePlay}
+        onPrevious={handlePrevious}
+        onNext={handleNext}
+        toggleRepeat={handleToggleRepeat}
+      />
     </div>
   )
 }
