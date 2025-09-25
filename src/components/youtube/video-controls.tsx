@@ -18,13 +18,10 @@ export const VideoControls = ({ playerRef, playerState, currentTime }: VideoCont
   const { currentIndex, subtitles, nextSubtitle, prevSubtitle, isRepeatMode, toggleRepeatMode } =
     useSubtitleStore()
 
-  // useSubtitleRepeat({ playerRef, currentTime })
-
   useEffect(() => {
     if (!playerRef.current || subtitles.length === 0) return
     const endTime = timeStringToSeconds(subtitles[currentIndex].endTime)
     if (currentTime >= endTime) {
-      // alert('?')
       playerRef.current?.seekTo(timeStringToSeconds(subtitles[currentIndex].startTime))
     }
   }, [currentTime, currentIndex, subtitles, playerRef])
@@ -55,8 +52,8 @@ export const VideoControls = ({ playerRef, playerState, currentTime }: VideoCont
     }
   }
 
-  const duration = playerRef.current?.getDuration?.() || 0
-  const progressPercentage = duration > 0 ? (currentTime / duration) * 100 : 0
+  const progressPercentage =
+    subtitles.length > 0 ? ((currentIndex + 1) / subtitles.length) * 100 : 0
 
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg z-50">
