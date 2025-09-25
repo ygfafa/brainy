@@ -1,6 +1,6 @@
-import { CATEGORY_TABS_HEIGHT, CategoryTabs } from '@/components/youtube/category-tabs'
-import { Header, HEADER_HEIGHT } from '@/components/youtube/header'
-import { VideoFeed } from '@/components/youtube/video-feed'
+import { CATEGORY_TABS_HEIGHT, CategoryTabs } from '@/components/category-tabs'
+import { Header, HEADER_HEIGHT } from '@/components/header'
+import { VideoFeed } from '@/components/video-feed'
 import { mockVideos } from '@/data/mock-youtube-data'
 import { type Category, useCategories } from '@/hooks/use-categories'
 

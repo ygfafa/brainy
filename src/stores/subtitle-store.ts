@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-import type { YouTubePlayerRef } from '@/components/youtube/youtube-player'
+import type { YouTubePlayerRef } from '@/components/youtube-player'
 import type { Subtitle } from '@/types/subtitle'
 import { timeStringToSeconds } from '@/utils/time'
 

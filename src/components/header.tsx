@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router'
 
 import { paths } from '@/config/paths'
 
-import { MAX_MOBILE_SCREEN_WIDTH } from '../layout/mobile-only-layout'
+import { MAX_MOBILE_SCREEN_WIDTH } from './layout/mobile-only-layout'
 
 export const HEADER_HEIGHT = 64
 export const Header = () => {

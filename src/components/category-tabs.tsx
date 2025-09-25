@@ -1,7 +1,7 @@
 import { cn } from '@/lib/utils'
 import type { Category } from '@/types/youtube'
 
-import { MAX_MOBILE_SCREEN_WIDTH } from '../layout/mobile-only-layout'
+import { MAX_MOBILE_SCREEN_WIDTH } from './layout/mobile-only-layout'
 
 type CategoryTabsProps = {
   categories: Category[]
