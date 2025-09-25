@@ -59,10 +59,23 @@ const WatchPage = () => {
   }, [videoId, setSubtitles])
 
   useEffect(() => {
-    if (!playerRef.current || subtitles.length === 0) return
+    if (isRepeatMode) {
+      const endTime = timeStringToSeconds(subtitles[currentIndex].endTime)
+      if (currentTime >= endTime) {
+        playerRef.current?.seekTo(timeStringToSeconds(subtitles[currentIndex].startTime))
+      }
+    }
+  }, [currentTime, isRepeatMode, syncWithTime, currentIndex, subtitles, playerRef])
+
+  useEffect(() => {
+    if (subtitles.length === 0) return
+
     const endTime = timeStringToSeconds(subtitles[currentIndex].endTime)
-    if (currentTime >= endTime) {
-      playerRef.current?.seekTo(timeStringToSeconds(subtitles[currentIndex].startTime))
+    const isLastSubtitle = currentIndex === subtitles.length - 1
+    if (isLastSubtitle && currentTime >= endTime) {
+      alert('영상 끝!')
+      playerRef.current?.pause()
+      return
     }
   }, [currentTime, currentIndex, subtitles, playerRef])
 
