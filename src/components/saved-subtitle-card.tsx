@@ -1,3 +1,4 @@
+import { AnimatePresence, motion } from 'framer-motion'
 import { Play, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router'
@@ -6,16 +7,18 @@ import { paths } from '@/config/paths'
 import type { SavedSubtitle } from '@/stores/saved-subtitles-store'
 import { useSavedSubtitlesStore } from '@/stores/saved-subtitles-store'
 
+import { UnderlinedText } from './ui/underlined-text'
+
 type SavedSubtitleCardProps = {
   savedSubtitle: SavedSubtitle
 }
 
 export const SavedSubtitleCard = ({ savedSubtitle }: SavedSubtitleCardProps) => {
-  const [isFlipped, setIsFlipped] = useState(false)
+  const [isCommentaryOpen, setIsCommentaryOpen] = useState(false)
   const { removeSubtitle } = useSavedSubtitlesStore()
   const navigate = useNavigate()
 
-  const { subtitle, videoId, videoTitle } = savedSubtitle
+  const { subtitle, videoId } = savedSubtitle
 
   const handleGoToVideo = () => {
     navigate(paths.watch.getHref(videoId))
@@ -29,93 +32,85 @@ export const SavedSubtitleCard = ({ savedSubtitle }: SavedSubtitleCardProps) => 
     removeSubtitle(savedSubtitle.id)
   }
 
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60)
-    const secs = Math.floor(seconds % 60)
-    return `${mins}:${secs.toString().padStart(2, '0')}`
+  const handleUnderlineClick = () => {
+    // commentary 토글
+    setIsCommentaryOpen(!isCommentaryOpen)
   }
 
   return (
-    <div className="relative">
-      <div
-        className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow cursor-pointer"
-        style={{ perspective: '1000px' }}
-      >
-        <div
-          className={`relative transition-transform duration-500 preserve-3d ${
-            isFlipped ? 'rotate-y-180' : ''
-          }`}
-          style={{
-            transformStyle: 'preserve-3d',
-            transition: 'transform 0.5s',
-            transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
-          }}
-          onClick={() => setIsFlipped(!isFlipped)}
-        >
-          {/* 앞면 - 원문 */}
-          <div
-            className="p-4 backface-hidden"
-            style={{
-              backfaceVisibility: 'hidden',
-            }}
-          >
-            <div className="flex justify-between items-start mb-2">
-              <span className="text-xs text-gray-500">{formatTime(subtitle.startTime)}</span>
-              <button
-                onClick={handleDelete}
-                className="p-1 text-red-500 hover:bg-red-50 rounded transition-colors"
-                title="삭제"
-              >
-                <Trash2 className="w-4 h-4" />
-              </button>
-            </div>
-            <p className="text-base font-medium text-gray-900 mb-3 min-h-[48px]">
-              {subtitle.text}
-            </p>
-            {videoTitle && (
-              <p className="text-xs text-gray-500 truncate mb-2">{videoTitle}</p>
-            )}
-            <button
-              onClick={(e) => {
-                e.stopPropagation()
-                handleGoToVideo()
-              }}
-              className="flex items-center gap-1 px-3 py-1.5 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors text-sm"
-            >
-              <Play className="w-3 h-3" />
-              영상으로 이동
-            </button>
-          </div>
+    <div className="bg-white rounded-lg shadow-sm p-4 border border-gray-100">
+      {/* 원문 텍스트 - 중괄호 부분이 underline으로 표시되고 클릭 시 commentary 토글 */}
+      <div className="mb-3">
+        <UnderlinedText
+          text={subtitle.text}
+          className="text-lg font-medium text-gray-900 leading-relaxed"
+          onUnderlineClick={handleUnderlineClick}
+        />
+      </div>
 
-          {/* 뒷면 - 번역 */}
-          <div
-            className="absolute inset-0 p-4 backface-hidden rotate-y-180"
-            style={{
-              backfaceVisibility: 'hidden',
-              transform: 'rotateY(180deg)',
-            }}
-          >
-            <div className="flex justify-between items-start mb-2">
-              <span className="text-xs text-gray-500">번역</span>
-            </div>
-            <p className="text-base text-gray-700 min-h-[48px]">
-              {subtitle.translation}
-            </p>
-            {videoTitle && (
-              <p className="text-xs text-gray-500 truncate mb-2">{videoTitle}</p>
-            )}
-            <button
-              onClick={(e) => {
-                e.stopPropagation()
-                handleGoToVideo()
+      {/* 번역 텍스트 */}
+      <div className="mb-4">
+        <p className="text-sm text-gray-600 leading-relaxed">{subtitle.translation}</p>
+      </div>
+
+      {/* Commentary 아코디언 - UnderlinedText 클릭으로 토글됨 */}
+      {subtitle.commentary && (
+        <AnimatePresence>
+          {isCommentaryOpen && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{
+                duration: 0.4,
+                ease: 'easeInOut',
               }}
-              className="flex items-center gap-1 px-3 py-1.5 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors text-sm"
+              className="overflow-hidden mb-4"
             >
-              <Play className="w-3 h-3" />
-              영상으로 이동
-            </button>
-          </div>
-        </div>
+              <motion.div
+                initial={{ y: -10 }}
+                animate={{ y: 0 }}
+                exit={{ y: -10 }}
+                transition={{ duration: 0.3, delay: 0.1 }}
+                className="p-3 bg-blue-50 border border-blue-200 rounded-lg"
+              >
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                  <span className="text-xs font-semibold text-blue-700 uppercase tracking-wide">
+                    Commentary
+                  </span>
+                </div>
+                <div className="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">
+                  {subtitle.commentary}
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      )}
+
+      {/* 액션 버튼들 */}
+      <div className="flex justify-end gap-2 pt-3 border-t border-gray-100">
+        <button
+          onClick={e => {
+            e.stopPropagation()
+            handleGoToVideo()
+          }}
+          className="flex items-center gap-2 px-3 py-2 text-sm text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+        >
+          <Play className="w-4 h-4" />
+          영상 재생
+        </button>
+        <button
+          onClick={e => {
+            e.stopPropagation()
+            handleDelete(e)
+          }}
+          className="flex items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+        >
+          <Trash2 className="w-4 h-4" />
+          삭제
+        </button>
       </div>
     </div>
   )

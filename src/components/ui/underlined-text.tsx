@@ -1,20 +1,16 @@
 import type { ReactNode } from 'react'
 
-type HighlightedTextProps = {
+type UnderlinedTextProps = {
   text: string
   className?: string
-  onHighlightClick?: (word: string) => void
+  onUnderlineClick?: () => void
 }
 
-export const HighlightedText = ({
-  text,
-  className = '',
-  onHighlightClick,
-}: HighlightedTextProps) => {
+export const UnderlinedText = ({ text, className = '', onUnderlineClick }: UnderlinedTextProps) => {
   // 중괄호로 감싸진 텍스트를 찾는 정규식
   const highlightRegex = /\{([^}]+)\}/g
 
-  const renderHighlightedText = (text: string): ReactNode[] => {
+  const renderUnderlinedText = (text: string): ReactNode[] => {
     const parts: ReactNode[] = []
     let lastIndex = 0
     let match: RegExpExecArray | null
@@ -25,21 +21,12 @@ export const HighlightedText = ({
         parts.push(<span key={`text-${lastIndex}`}>{text.slice(lastIndex, match.index)}</span>)
       }
 
-      // 하이라이트된 텍스트 추가 (중괄호 제거) - underline 스타일
+      // 언더라인된 텍스트 추가 (중괄호 제거)
       parts.push(
         <span
-          key={`highlight-${match.index}`}
+          key={`underline-${match.index}`}
           className="underline decoration-2 decoration-blue-500 cursor-pointer hover:decoration-blue-700 hover:text-blue-700 transition-colors duration-200"
-          onClick={() => {
-            const word = match?.[1]
-            if (word) {
-              if (onHighlightClick) {
-                onHighlightClick(word)
-              } else {
-                alert(`클릭한 단어: "${word}"`)
-              }
-            }
-          }}
+          onClick={onUnderlineClick}
         >
           {match[1]}
         </span>,
@@ -56,5 +43,5 @@ export const HighlightedText = ({
     return parts
   }
 
-  return <span className={className}>{renderHighlightedText(text)}</span>
+  return <span className={className}>{renderUnderlinedText(text)}</span>
 }

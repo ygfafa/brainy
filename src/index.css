@@ -76,15 +76,20 @@
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    box-sizing: border-box;
   }
-  html {
-    @apply h-full w-full;
+  html,
+  body {
+    user-select: none;
+    -webkit-tap-highlight-color: transparent; 
+    -ms-overflow-style: none;
+    scrollbar-width: none; /* Firefox */
   }
   body {
-    @apply bg-background text-foreground h-full w-full;
+    /* font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif; */
+    color: '#1B2228';
   }
-  #root {
-    @apply h-full w-full;
+  body::-webkit-scrollbar {
+    display: none; /* Chrome, Safari */
   }
 }
