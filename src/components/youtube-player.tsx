@@ -135,6 +135,7 @@ export const YouTubePlayer = forwardRef<YouTubePlayerRef, YouTubePlayerProps>(
       }
 
       return () => {
+        stopTimeTracking()
         playerRef.current?.destroy()
         setIsPlayerReady(false)
         setShowPlayer(false)
