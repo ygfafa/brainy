@@ -100,7 +100,6 @@ const WatchPage = () => {
     const isLastSubtitle = currentIndex === subtitles.length - 1
     if (isLastSubtitle && currentTime >= endTime) {
       playerRef.current?.pause()
-      console.log('영상 끝!')
       return
     }
   }, [currentTime, currentIndex, subtitles, playerRef])
@@ -112,7 +111,7 @@ const WatchPage = () => {
   return (
     <div className="min-h-screen bg-white pb-20">
       <YouTubePlayer
-        autoPlay
+        // autoPlay
         ref={playerRef}
         videoId={videoId}
         initialTime={timeStringToSeconds(subtitles[0]?.startTime || '00:00:00')}
