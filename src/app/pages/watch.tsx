@@ -65,7 +65,6 @@ const WatchPage = () => {
   const handleSaveSubtitle = () => {
     if (isSaved && savedSubtitle) {
       removeSubtitle(savedSubtitle.id)
-      toast('자막이 장바구니에서 제거되었습니다')
     } else {
       addSubtitle(videoId!, currentSubtitle)
       toast('자막이 장바구니에 담겼습니다', {
@@ -120,7 +119,11 @@ const WatchPage = () => {
       />
 
       {/* 자막 담기 버튼 */}
-      <SaveSubtitleButton onClick={handleSaveSubtitle} isSaved={isSaved} />
+      <SaveSubtitleButton
+        onClick={handleSaveSubtitle}
+        isSaved={isSaved}
+        hasCommentary={!!currentSubtitle?.commentary}
+      />
 
       {/* 현재 자막 표시 */}
       <VideoSubtitles data={currentSubtitle} />

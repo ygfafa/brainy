@@ -1,5 +1,6 @@
 import type { Subtitle } from '@/types/subtitle'
 
+import { CommentaryMarkdown } from './commentary-markdown'
 import { HighlightedText } from './ui/highlighted-text'
 
 type VideoSubtitlesProps = {
@@ -15,7 +16,7 @@ export const VideoSubtitles = ({ data }: VideoSubtitlesProps) => {
         <p className="text-sm text-gray-600">{data.translation}</p>
         {data.commentary && (
           <div className="mt-4">
-            <p className="text-sm text-gray-600">{data.commentary}</p>
+            <CommentaryMarkdown content={data.commentary} />
           </div>
         )}
       </div>

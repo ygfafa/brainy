@@ -24,17 +24,16 @@ export const mockSubtitles: Record<string, Subtitle[]> = {
       text: '난 지금 일정 짜는 데만 1시간 {걸렸어}.',
       translation: 'Mình mất hẳn một tiếng chỉ để lên lịch.',
       commentary: `
-      ###“걸렸어 (걸리다)” — giải thích cho người Việt
+### 걸렸어 (걸리다)
+- giải thích cho người Việt
 - Ý nghĩa: Diễn tả thời gian bị tốn/đã tốn cho một việc. Gần với “mất (bao nhiêu thời gian)”.
- - Thường nói: “mất [thời gian] (rồi)”. Từ “rồi” dùng khi việc đã xong.
-
-###Mẫu câu cơ bản
+- Thường nói: “mất [thời gian] (rồi)”. Từ “rồi” dùng khi việc đã xong.
+### Mẫu câu cơ bản
 - [thời gian] + 걸렸어 → “Mất [thời gian] (rồi).”
 - [V-는 데(만)] + [thời gian] + 걸렸어 → “Chỉ riêng [việc V] thôi cũng mất [thời gian].”
 -는 데: biến động từ thành cụm danh từ “việc [V]”
 - 만: “chỉ, riêng”
-
-###Ví dụ
+### Ví dụ
 - 1시간 걸렸어 → Mất một tiếng rồi.
 - 난 지금 일정 짜는 데만 1시간 걸렸어 → Chỉ riêng việc lên lịch thôi cũng mất một tiếng.
 - 집 가는 데 30분 걸렸어 → Đi về nhà mất 30 phút.

@@ -3,8 +3,13 @@ import { ShoppingCart } from 'lucide-react'
 type SaveSubtitleButtonProps = {
   onClick: () => void
   isSaved: boolean
+  hasCommentary?: boolean
 }
-export const SaveSubtitleButton = ({ onClick, isSaved }: SaveSubtitleButtonProps) => {
+export const SaveSubtitleButton = ({
+  onClick,
+  isSaved,
+  hasCommentary = false,
+}: SaveSubtitleButtonProps) => {
   return (
     <button
       onClick={onClick}
@@ -12,7 +17,7 @@ export const SaveSubtitleButton = ({ onClick, isSaved }: SaveSubtitleButtonProps
         isSaved
           ? 'bg-blue-500 text-white hover:bg-blue-600'
           : 'bg-white text-gray-600 hover:bg-gray-50 border'
-      }`}
+      } ${hasCommentary ? 'animate-bounce' : ''}`}
       title={isSaved ? '장바구니에서 빼기' : '장바구니에 담기'}
     >
       <ShoppingCart className={`w-6 h-6 ${isSaved ? 'fill-current' : ''}`} />

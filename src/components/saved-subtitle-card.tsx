@@ -7,6 +7,7 @@ import { paths } from '@/config/paths'
 import type { SavedSubtitle } from '@/stores/saved-subtitles-store'
 import { useSavedSubtitlesStore } from '@/stores/saved-subtitles-store'
 
+import { CommentaryMarkdown } from './commentary-markdown'
 import { UnderlinedText } from './ui/underlined-text'
 
 type SavedSubtitleCardProps = {
@@ -38,7 +39,7 @@ export const SavedSubtitleCard = ({ savedSubtitle }: SavedSubtitleCardProps) => 
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-sm p-4 border border-gray-100">
+    <div className="bg-white rounded p-4 border border-gray-100">
       {/* 원문 텍스트 - 중괄호 부분이 underline으로 표시되고 클릭 시 commentary 토글 */}
       <div className="mb-3">
         <UnderlinedText
@@ -72,17 +73,8 @@ export const SavedSubtitleCard = ({ savedSubtitle }: SavedSubtitleCardProps) => 
                 animate={{ y: 0 }}
                 exit={{ y: -10 }}
                 transition={{ duration: 0.3, delay: 0.1 }}
-                className="p-3 bg-blue-50 border border-blue-200 rounded-lg"
               >
-                <div className="flex items-center gap-2 mb-2">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                  <span className="text-xs font-semibold text-blue-700 uppercase tracking-wide">
-                    Commentary
-                  </span>
-                </div>
-                <div className="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">
-                  {subtitle.commentary}
-                </div>
+                <CommentaryMarkdown content={subtitle.commentary} />
               </motion.div>
             </motion.div>
           )}
@@ -90,26 +82,24 @@ export const SavedSubtitleCard = ({ savedSubtitle }: SavedSubtitleCardProps) => 
       )}
 
       {/* 액션 버튼들 */}
-      <div className="flex justify-end gap-2 pt-3 border-t border-gray-100">
-        <button
+      <div className="flex justify-center gap-2 pt-3 border-t border-gray-100">
+        {/* <button
           onClick={e => {
             e.stopPropagation()
             handleGoToVideo()
           }}
-          className="flex items-center gap-2 px-3 py-2 text-sm text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+          className="flex items-center gap-2 px-3 py-2 "
         >
           <Play className="w-4 h-4" />
-          영상 재생
-        </button>
+        </button> */}
         <button
           onClick={e => {
             e.stopPropagation()
             handleDelete(e)
           }}
-          className="flex items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+          className="flex items-center gap-2 px-3 py-2 text-sm "
         >
           <Trash2 className="w-4 h-4" />
-          삭제
         </button>
       </div>
     </div>
