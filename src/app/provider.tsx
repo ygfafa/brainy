@@ -1,4 +1,5 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { PostHogProvider } from 'posthog-js/react'
 import * as React from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { HelmetProvider } from 'react-helmet-async'
@@ -6,6 +7,7 @@ import { Toaster } from 'sonner'
 
 import { MobileOnlyLayout } from '@/components/layout/mobile-only-layout'
 import { Spinner } from '@/components/ui/spinner'
+import { env } from '@/config/env'
 import { queryConfig } from '@/lib/react-query'
 
 type AppProviderProps = {
@@ -46,7 +48,17 @@ export const AppProvider = ({ children }: AppProviderProps) => {
                 },
               }}
             />
-            <MobileOnlyLayout>{children}</MobileOnlyLayout>
+            <MobileOnlyLayout>
+              <PostHogProvider
+                apiKey={env.POSTHOG_KEY}
+                options={{
+                  api_host: env.POSTHOG_HOST,
+                  defaults: '2025-05-24',
+                }}
+              >
+                {children}
+              </PostHogProvider>
+            </MobileOnlyLayout>
           </QueryClientProvider>
         </HelmetProvider>
       </ErrorBoundary>

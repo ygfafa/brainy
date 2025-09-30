@@ -2,7 +2,8 @@ import * as z from 'zod'
 
 const createEnv = () => {
   const EnvSchema = z.object({
-    API_URL: z.string(),
+    POSTHOG_KEY: z.string(),
+    POSTHOG_HOST: z.string(),
   })
 
   const envVars = Object.entries(import.meta.env).reduce<Record<string, string>>((acc, curr) => {
