@@ -1,9 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { Play, Trash2 } from 'lucide-react'
+import { Trash2 } from 'lucide-react'
 import { useState } from 'react'
-import { useNavigate } from 'react-router'
 
-import { paths } from '@/config/paths'
 import type { SavedSubtitle } from '@/stores/saved-subtitles-store'
 import { useSavedSubtitlesStore } from '@/stores/saved-subtitles-store'
 
@@ -17,16 +15,16 @@ type SavedSubtitleCardProps = {
 export const SavedSubtitleCard = ({ savedSubtitle }: SavedSubtitleCardProps) => {
   const [isCommentaryOpen, setIsCommentaryOpen] = useState(false)
   const { removeSubtitle } = useSavedSubtitlesStore()
-  const navigate = useNavigate()
+  // const navigate = useNavigate()
 
-  const { subtitle, videoId } = savedSubtitle
+  const { subtitle } = savedSubtitle
 
-  const handleGoToVideo = () => {
-    navigate(paths.watch.getHref(videoId))
-    // 비디오 페이지로 이동 후 해당 시간으로 seek하기 위해 쿼리 파라미터 추가
-    const url = `${paths.watch.getHref(videoId)}?t=${subtitle.startTime}`
-    navigate(url)
-  }
+  // const handleGoToVideo = () => {
+  //   navigate(paths.watch.getHref(videoId))
+  //   // 비디오 페이지로 이동 후 해당 시간으로 seek하기 위해 쿼리 파라미터 추가
+  //   const url = `${paths.watch.getHref(videoId)}?t=${subtitle.startTime}`
+  //   navigate(url)
+  // }
 
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation()

@@ -1,17 +1,17 @@
 import { create } from 'zustand'
 
 import type { YouTubePlayerRef } from '@/components/___youtube-player'
-import type { Subtitle } from '@/types/subtitle'
+import type { Dialogue } from '@/types/youtube'
 import { timeStringToSeconds } from '@/utils/time'
 
 type SubtitleStore = {
   // 상태
-  subtitles: Subtitle[]
+  subtitles: Dialogue[]
   currentIndex: number
   isRepeatMode: boolean
 
   // 액션
-  setSubtitles: (subtitles: Subtitle[]) => void
+  setSubtitles: (subtitles: Dialogue[]) => void
   syncWithTime: (time: number) => void
   nextSubtitle: (playerRef?: YouTubePlayerRef | null) => void
   prevSubtitle: (playerRef?: YouTubePlayerRef | null) => void

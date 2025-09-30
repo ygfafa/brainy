@@ -1,10 +1,10 @@
-import type { Subtitle } from '@/types/subtitle'
+import type { Dialogue } from '@/types/youtube'
 
 import { CommentaryMarkdown } from './commentary-markdown'
 import { HighlightedText } from './ui/highlighted-text'
 
 type VideoSubtitlesProps = {
-  data: Subtitle
+  data: Dialogue
 }
 export const VideoSubtitles = ({ data }: VideoSubtitlesProps) => {
   if (!data) return null

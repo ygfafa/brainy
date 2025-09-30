@@ -1,7 +1,8 @@
 import { useNavigate } from 'react-router'
 
 import { paths } from '@/config/paths'
-import type { Video } from '@/types/youtube'
+import type { Level, Video } from '@/types/youtube'
+import { secondsToTimeString, timeStringToSeconds } from '@/utils/time'
 
 type VideoCardProps = {
   video: Video
@@ -19,7 +20,9 @@ export const VideoCard = ({ video }: VideoCardProps) => {
       <div className="relative">
         <img src={video.thumbnail} alt={video.title} className="w-full aspect-video object-cover" />
         <div className="absolute bottom-2 right-2 bg-black/80 text-white text-xs px-1 py-0.5 rounded">
-          {video.duration}
+          {secondsToTimeString(
+            timeStringToSeconds(video.endTime) - timeStringToSeconds(video.startTime),
+          )}
         </div>
       </div>
       <div className="flex-1 mt-3 px-3">
@@ -28,23 +31,23 @@ export const VideoCard = ({ video }: VideoCardProps) => {
         <div className="flex items-center gap-1 text-sm text-gray-600">
           <DifficultyLevel level={video.level as keyof typeof DIFFICULTY_LEVEL} />
           <span>•</span>
-          <span>{video.subtitleCount}문장</span>
+          <span>{video.dialogueCount}문장</span>
         </div>
       </div>
     </div>
   )
 }
 
-const DIFFICULTY_LEVEL = {
-  1: {
+const DIFFICULTY_LEVEL: Record<Level, { label: string; color: string }> = {
+  easy: {
     label: '쉬움',
     color: '#008000',
   },
-  2: {
+  medium: {
     label: '보통',
     color: '#FFA500',
   },
-  3: {
+  hard: {
     label: '어려움',
     color: '#FF0000',
   },

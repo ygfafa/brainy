@@ -6,7 +6,7 @@ import { SaveSubtitleButton } from '@/components/save-subtitle-button'
 import { VideoController } from '@/components/video-controller'
 import { VideoSubtitles } from '@/components/video-subtitles'
 import { YouTubePlayer, type YouTubePlayerRef } from '@/components/youtube-player'
-import { defaultSubtitles, mockSubtitles } from '@/data/mock-subtitles'
+import { defaultSubtitles, dialogue } from '@/data/dialogue'
 import { useSavedSubtitlesStore } from '@/stores/saved-subtitles-store'
 import { useSubtitleStore } from '@/stores/subtitle-store'
 import { timeStringToSeconds } from '@/utils/time'
@@ -78,7 +78,7 @@ const WatchPage = () => {
 
   useEffect(() => {
     if (videoId) {
-      const videoSubtitles = mockSubtitles[videoId] || defaultSubtitles
+      const videoSubtitles = dialogue[videoId] || defaultSubtitles
       setSubtitles(videoSubtitles)
     }
   }, [videoId, setSubtitles])

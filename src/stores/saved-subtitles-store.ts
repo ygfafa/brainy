@@ -1,19 +1,19 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
-import type { Subtitle } from '@/types/subtitle'
+import type { Dialogue } from '@/types/youtube'
 
 export type SavedSubtitle = {
   id: string
   videoId: string
   videoTitle?: string
-  subtitle: Subtitle
+  subtitle: Dialogue
   savedAt: number
 }
 
 type SavedSubtitlesStore = {
   savedSubtitles: SavedSubtitle[]
-  addSubtitle: (videoId: string, subtitle: Subtitle, videoTitle?: string) => void
+  addSubtitle: (videoId: string, subtitle: Dialogue, videoTitle?: string) => void
   removeSubtitle: (id: string) => void
   isSubtitleSaved: (videoId: string, subtitleId: string) => boolean
   getSavedSubtitle: (videoId: string, subtitleId: string) => SavedSubtitle | undefined
@@ -46,15 +46,11 @@ export const useSavedSubtitlesStore = create<SavedSubtitlesStore>()(
       },
 
       isSubtitleSaved: (videoId, subtitleId) => {
-        return get().savedSubtitles.some(
-          s => s.videoId === videoId && s.subtitle.id === subtitleId,
-        )
+        return get().savedSubtitles.some(s => s.videoId === videoId && s.subtitle.id === subtitleId)
       },
 
       getSavedSubtitle: (videoId, subtitleId) => {
-        return get().savedSubtitles.find(
-          s => s.videoId === videoId && s.subtitle.id === subtitleId,
-        )
+        return get().savedSubtitles.find(s => s.videoId === videoId && s.subtitle.id === subtitleId)
       },
 
       clearAll: () => {

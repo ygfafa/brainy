@@ -1,7 +1,7 @@
 import { CATEGORY_TABS_HEIGHT, CategoryTabs } from '@/components/category-tabs'
 import { Header, HEADER_HEIGHT } from '@/components/header'
 import { VideoFeed } from '@/components/video-feed'
-import { mockVideos } from '@/data/mock-youtube-data'
+import { videos } from '@/data/videos'
 import { type Category, useCategories } from '@/hooks/use-categories'
 
 const HomePage = () => {
@@ -15,7 +15,7 @@ const HomePage = () => {
       <Header />
       <CategoryTabs categories={categories} onCategoryClick={handleCategoryActive} />
       <div style={{ paddingTop: CATEGORY_TABS_HEIGHT + HEADER_HEIGHT }}>
-        <VideoFeed videos={mockVideos} />
+        <VideoFeed videos={videos} />
       </div>
     </div>
   )
