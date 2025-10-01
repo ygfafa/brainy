@@ -4,9 +4,8 @@ import { X } from 'lucide-react'
 import React from 'react'
 import { Drawer } from 'vaul'
 
+import { MAX_MOBILE_SCREEN_WIDTH } from '@/config/app'
 import { cn } from '@/lib/utils'
-
-import { MAX_MOBILE_SCREEN_WIDTH } from '../layout/mobile-only-layout'
 
 type BottomSheetProps = {
   className?: string

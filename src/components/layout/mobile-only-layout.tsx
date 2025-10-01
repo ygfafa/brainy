@@ -1,8 +1,7 @@
 import React from 'react'
 
+import { MAX_MOBILE_SCREEN_WIDTH } from '@/config/app'
 import { cn } from '@/lib/utils'
-
-export const MAX_MOBILE_SCREEN_WIDTH = 640
 
 type MainLayoutProps = {
   width?: number

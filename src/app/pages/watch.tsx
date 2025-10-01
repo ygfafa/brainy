@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router'
 import { toast } from 'sonner'
 
+import { Page, PageAppBarWithBack } from '@/components/layout/page'
 import { SaveSubtitleButton } from '@/components/save-subtitle-button'
 import { VideoController } from '@/components/video-controller'
 import { VideoSubtitles } from '@/components/video-subtitles'
@@ -108,7 +109,8 @@ const WatchPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white pb-20">
+    <Page>
+      <PageAppBarWithBack title="대사 골라 담기" />
       <YouTubePlayer
         // autoPlay
         ref={playerRef}
@@ -137,7 +139,7 @@ const WatchPage = () => {
         onNext={handleNext}
         toggleRepeat={handleToggleRepeat}
       />
-    </div>
+    </Page>
   )
 }
 
