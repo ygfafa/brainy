@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router'
 
 import { paths } from '@/config/paths'
 import type { Level, Video } from '@/types/youtube'
+import { getYouTubeThumbnailUrl } from '@/utils/thumbnail'
 import { secondsToTimeString, timeStringToSeconds } from '@/utils/time'
 
 type VideoCardProps = {
@@ -18,7 +19,16 @@ export const VideoCard = ({ video }: VideoCardProps) => {
   return (
     <div className="flex flex-col" onClick={handleClick}>
       <div className="relative">
-        <img src={video.thumbnail} alt={video.title} className="w-full aspect-video object-cover" />
+        <img
+          src={video.thumbnail}
+          alt={video.title}
+          className="w-full aspect-video object-cover"
+          onError={e => {
+            // Fallback to YouTube thumbnail if local image not found
+            const img = e.currentTarget
+            img.src = getYouTubeThumbnailUrl(video.videoId)
+          }}
+        />
         <div className="absolute bottom-2 right-2 bg-black/80 text-white text-xs px-1 py-0.5 rounded">
           {secondsToTimeString(
             timeStringToSeconds(video.endTime) - timeStringToSeconds(video.startTime),

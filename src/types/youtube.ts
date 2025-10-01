@@ -1,7 +1,7 @@
 export type Level = 'easy' | 'medium' | 'hard'
 export type Video = {
   videoId: string
-  thumbnail: string
+  thumbnail: string // optional for backward compatibility
   title: string
   description: string
   level: Level
