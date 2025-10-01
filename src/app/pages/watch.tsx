@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router'
 import { toast } from 'sonner'
 
-import { Page, PageAppBarWithBack } from '@/components/layout/page'
+import { Page, PageAppBarWithBack, PageContent } from '@/components/layout/page'
 import { SaveSubtitleButton } from '@/components/save-subtitle-button'
 import { VideoController } from '@/components/video-controller'
 import { VideoSubtitles } from '@/components/video-subtitles'
@@ -111,34 +111,36 @@ const WatchPage = () => {
   return (
     <Page>
       <PageAppBarWithBack title="대사 골라 담기" />
-      <YouTubePlayer
-        // autoPlay
-        ref={playerRef}
-        videoId={videoId}
-        initialTime={timeStringToSeconds(subtitles[0]?.startTime || '00:00:00')}
-        onStateChange={setPlayerState}
-        onTimeUpdate={handleTimeUpdate}
-      />
+      <PageContent noSidePadding>
+        <YouTubePlayer
+          // autoPlay
+          ref={playerRef}
+          videoId={videoId}
+          initialTime={timeStringToSeconds(subtitles[0]?.startTime || '00:00:00')}
+          onStateChange={setPlayerState}
+          onTimeUpdate={handleTimeUpdate}
+        />
 
-      {/* 자막 담기 버튼 */}
-      <SaveSubtitleButton
-        onClick={handleSaveSubtitle}
-        isSaved={isSaved}
-        hasCommentary={!!currentSubtitle?.commentary}
-      />
+        {/* 자막 담기 버튼 */}
+        <SaveSubtitleButton
+          onClick={handleSaveSubtitle}
+          isSaved={isSaved}
+          hasCommentary={!!currentSubtitle?.commentary}
+        />
 
-      {/* 현재 자막 표시 */}
-      <VideoSubtitles data={currentSubtitle} />
-      <VideoController
-        isPlaying={playerState === 1}
-        isRepeatMode={isRepeatMode}
-        hasPrevSubtitle={currentIndex > 0}
-        hasNextSubtitle={currentIndex < subtitles.length - 1}
-        togglePlay={handleTogglePlay}
-        onPrevious={handlePrevious}
-        onNext={handleNext}
-        toggleRepeat={handleToggleRepeat}
-      />
+        {/* 현재 자막 표시 */}
+        <VideoSubtitles data={currentSubtitle} />
+        <VideoController
+          isPlaying={playerState === 1}
+          isRepeatMode={isRepeatMode}
+          hasPrevSubtitle={currentIndex > 0}
+          hasNextSubtitle={currentIndex < subtitles.length - 1}
+          togglePlay={handleTogglePlay}
+          onPrevious={handlePrevious}
+          onNext={handleNext}
+          toggleRepeat={handleToggleRepeat}
+        />
+      </PageContent>
     </Page>
   )
 }

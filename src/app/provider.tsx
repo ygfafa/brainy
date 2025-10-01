@@ -5,7 +5,6 @@ import { ErrorBoundary } from 'react-error-boundary'
 import { HelmetProvider } from 'react-helmet-async'
 import { Toaster } from 'sonner'
 
-import { MobileOnlyLayout } from '@/components/layout/mobile-only-layout'
 import { Spinner } from '@/components/ui/spinner'
 import { env } from '@/config/env'
 import { queryConfig } from '@/lib/react-query'
@@ -48,17 +47,15 @@ export const AppProvider = ({ children }: AppProviderProps) => {
                 },
               }}
             />
-            <MobileOnlyLayout>
-              <PostHogProvider
-                apiKey={env.POSTHOG_KEY}
-                options={{
-                  api_host: env.POSTHOG_HOST,
-                  defaults: '2025-05-24',
-                }}
-              >
-                {children}
-              </PostHogProvider>
-            </MobileOnlyLayout>
+            <PostHogProvider
+              apiKey={env.POSTHOG_KEY}
+              options={{
+                api_host: env.POSTHOG_HOST,
+                defaults: '2025-05-24',
+              }}
+            >
+              {children}
+            </PostHogProvider>
           </QueryClientProvider>
         </HelmetProvider>
       </ErrorBoundary>

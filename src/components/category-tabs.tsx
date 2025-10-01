@@ -1,4 +1,4 @@
-import { MAX_MOBILE_SCREEN_WIDTH } from '@/config/app'
+import { APP_BAR_HEIGHT, MAX_MOBILE_SCREEN_WIDTH } from '@/config/app'
 import { cn } from '@/lib/utils'
 import type { Category } from '@/types/youtube'
 
@@ -12,11 +12,11 @@ export const CATEGORY_TABS_HEIGHT = 56
 export const CategoryTabs = ({ categories, onCategoryClick }: CategoryTabsProps) => {
   return (
     <div
-      className="fixed bg-white z-40"
+      className="sticky bg-white z-40"
       style={{
         maxWidth: MAX_MOBILE_SCREEN_WIDTH,
         margin: '0 auto',
-        top: 64,
+        top: APP_BAR_HEIGHT,
         left: 0,
         right: 0,
         height: CATEGORY_TABS_HEIGHT,

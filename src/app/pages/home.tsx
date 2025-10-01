@@ -1,10 +1,9 @@
 import { IconShoppingCartStar } from '@tabler/icons-react'
 import { useNavigate } from 'react-router'
 
-import { CATEGORY_TABS_HEIGHT, CategoryTabs } from '@/components/category-tabs'
-import { Page, PageAppBarWithLogo } from '@/components/layout/page'
+import { CategoryTabs } from '@/components/category-tabs'
+import { Page, PageAppBarWithLogo, PageContent } from '@/components/layout/page'
 import { VideoFeed } from '@/components/video-feed'
-import { APP_BAR_HEIGHT } from '@/config/app'
 import { paths } from '@/config/paths'
 import { videos } from '@/data/videos'
 import { type Category, useCategories } from '@/hooks/use-categories'
@@ -25,10 +24,10 @@ const HomePage = () => {
           </button>
         }
       />
-      <CategoryTabs categories={categories} onCategoryClick={handleCategoryActive} />
-      <div style={{ paddingTop: CATEGORY_TABS_HEIGHT + APP_BAR_HEIGHT }}>
+      <PageContent noSidePadding>
+        <CategoryTabs categories={categories} onCategoryClick={handleCategoryActive} />
         <VideoFeed videos={videos} />
-      </div>
+      </PageContent>
     </Page>
   )
 }

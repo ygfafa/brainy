@@ -1,4 +1,4 @@
-import { ShoppingCart } from 'lucide-react'
+import { IconShoppingCartStar } from '@tabler/icons-react'
 
 type SaveSubtitleButtonProps = {
   onClick: () => void
@@ -20,7 +20,7 @@ export const SaveSubtitleButton = ({
       } ${hasCommentary ? 'animate-bounce' : ''}`}
       title={isSaved ? '장바구니에서 빼기' : '장바구니에 담기'}
     >
-      <ShoppingCart className={`w-6 h-6 ${isSaved ? 'fill-current' : ''}`} />
+      <IconShoppingCartStar />
     </button>
   )
 }

@@ -1,4 +1,11 @@
-import { Pause, Play, Repeat, SkipBack, SkipForward } from 'lucide-react'
+import {
+  IconPlayerPauseFilled,
+  IconPlayerPlayFilled,
+  IconPlayerSkipBackFilled,
+  IconPlayerSkipForwardFilled,
+  IconRepeat,
+  IconRepeatOff,
+} from '@tabler/icons-react'
 
 type VideoControllerProps = {
   isPlaying: boolean
@@ -22,7 +29,7 @@ export const VideoController = ({
   hasNextSubtitle,
 }: VideoControllerProps) => {
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg z-50">
+    <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 shadow-lg z-50">
       <div className="max-w-[640px] mx-auto">
         {/* <div className="h-1 bg-gray-200">
           <div
@@ -40,12 +47,12 @@ export const VideoController = ({
               disabled={!hasPrevSubtitle}
               className="p-2 disabled:opacity-50"
             >
-              <SkipBack className="w-6 h-6" />
+              <IconPlayerSkipBackFilled />
             </button>
 
             {/* 재생/일시정지 버튼 */}
             <button onClick={togglePlay} className="p-2">
-              {isPlaying ? <Pause className="w-6 h-6" /> : <Play className="w-6 h-6" />}
+              {isPlaying ? <IconPlayerPauseFilled /> : <IconPlayerPlayFilled />}
             </button>
 
             {/* 다음 자막 버튼 */}
@@ -54,18 +61,13 @@ export const VideoController = ({
               disabled={!hasNextSubtitle}
               className="p-2 disabled:opacity-50"
             >
-              <SkipForward className="w-6 h-6" />
+              <IconPlayerSkipForwardFilled />
             </button>
 
             {/* 구간 반복 버튼 */}
           </div>
-          <button
-            onClick={toggleRepeat}
-            className={`p-2 rounded-full transition-colors ${
-              isRepeatMode ? 'text-emerald-600' : 'text-gray-600'
-            }`}
-          >
-            <Repeat className="w-6 h-6" />
+          <button onClick={toggleRepeat} className={'p-2 rounded-full transition-color'}>
+            {isRepeatMode ? <IconRepeat /> : <IconRepeatOff />}
           </button>
         </div>
       </div>

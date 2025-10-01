@@ -1,5 +1,5 @@
+import { IconTrash } from '@tabler/icons-react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { Trash2 } from 'lucide-react'
 import { useState } from 'react'
 
 import type { SavedSubtitle } from '@/stores/saved-subtitles-store'
@@ -95,9 +95,9 @@ export const SavedSubtitleCard = ({ savedSubtitle }: SavedSubtitleCardProps) => 
             e.stopPropagation()
             handleDelete(e)
           }}
-          className="flex items-center gap-2 px-3 py-2 text-sm "
+          className="flex items-center gap-2 text-sm "
         >
-          <Trash2 className="w-4 h-4" />
+          <IconTrash />
         </button>
       </div>
     </div>
