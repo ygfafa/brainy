@@ -1,6 +1,6 @@
 'use client'
 
-import { X } from 'lucide-react'
+import { IconX } from '@tabler/icons-react'
 import React from 'react'
 import { Drawer } from 'vaul'
 
@@ -55,7 +55,7 @@ export const BottomSheet = ({
           {!hideCloseButton && (
             <div className="absolute top-4 right-4">
               <button onClick={onClose}>
-                <X />
+                <IconX />
               </button>
             </div>
           )}
