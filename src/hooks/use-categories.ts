@@ -7,7 +7,7 @@ export type Category = {
 }
 
 const DEFAULT_CATEGORIES: Category[] = [
-  { id: 'all', label: '전체', active: true },
+  { id: 'all', label: 'Tất cả', active: true },
   { id: 'k-pop', label: 'K-pop' },
 ] as const
 

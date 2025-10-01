@@ -19,7 +19,7 @@ const MyDialoguesPage = () => {
           >
             <ArrowLeft className="w-5 h-5" />
           </button>
-          <h1 className="text-lg font-semibold">내 문장</h1>
+          <h1 className="text-lg font-semibold">Câu của tôi</h1>
         </div>
       </header>
 
@@ -27,8 +27,8 @@ const MyDialoguesPage = () => {
       <main className="px-4 py-6">
         {savedSubtitles.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-gray-500 mb-2">내 문장이 비어있습니다</p>
-            <p className="text-sm text-gray-400">영상을 보며 자막을 담아보세요</p>
+            <p className="text-gray-500 mb-2">Chưa có câu nào của bạn</p>
+            <p className="text-sm text-gray-400">Xem video và ghi lại phụ đề</p>
           </div>
         ) : (
           <div className="flex flex-col gap-2">

@@ -40,15 +40,15 @@ export const VideoCard = ({ video }: VideoCardProps) => {
 
 const DIFFICULTY_LEVEL: Record<Level, { label: string; color: string }> = {
   easy: {
-    label: '쉬움',
+    label: 'Dễ',
     color: '#008000',
   },
   medium: {
-    label: '보통',
+    label: 'Trung bình',
     color: '#FFA500',
   },
   hard: {
-    label: '어려움',
+    label: 'Khó',
     color: '#FF0000',
   },
 }

@@ -1,4 +1,4 @@
-import { BookType } from 'lucide-react'
+import { IconShoppingCartStar } from '@tabler/icons-react'
 import { useNavigate } from 'react-router'
 
 import { paths } from '@/config/paths'
@@ -17,7 +17,7 @@ export const Header = () => {
         <h1 className="text-lg font-bold">Logo</h1>
         <div className="flex items-center gap-4">
           <button className="p-2" onClick={() => navigate(paths.my.dialogues.getHref())}>
-            <BookType className="w-6 h-6" />
+            <IconShoppingCartStar />
           </button>
         </div>
       </div>
