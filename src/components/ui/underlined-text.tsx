@@ -3,10 +3,11 @@ import type { ReactNode } from 'react'
 type UnderlinedTextProps = {
   text: string
   className?: string
+  lang?: string
   onUnderlineClick?: () => void
 }
 
-export const UnderlinedText = ({ text, className = '', onUnderlineClick }: UnderlinedTextProps) => {
+export const UnderlinedText = ({ text, className = '', lang, onUnderlineClick }: UnderlinedTextProps) => {
   // 중괄호로 감싸진 텍스트를 찾는 정규식
   const highlightRegex = /\{([^}]+)\}/g
 
@@ -43,5 +44,5 @@ export const UnderlinedText = ({ text, className = '', onUnderlineClick }: Under
     return parts
   }
 
-  return <span className={className}>{renderUnderlinedText(text)}</span>
+  return <span className={className} lang={lang}>{renderUnderlinedText(text)}</span>
 }

@@ -388,6 +388,16 @@
     "@eslint/core" "^0.15.0"
     levn "^0.4.1"
 
+"@fontsource-variable/inter@^5.2.8":
+  version "5.2.8"
+  resolved "https://registry.yarnpkg.com/@fontsource-variable/inter/-/inter-5.2.8.tgz#29b11476f5149f6a443b4df6516e26002d87941a"
+  integrity sha512-kOfP2D+ykbcX/P3IFnokOhVRNoTozo5/JxhAIVYLpea/UBmCQ/YWPBfWIDuBImXX/15KH+eKh4xpEUyS2sQQGQ==
+
+"@fontsource-variable/noto-sans-kr@^5.2.9":
+  version "5.2.9"
+  resolved "https://registry.yarnpkg.com/@fontsource-variable/noto-sans-kr/-/noto-sans-kr-5.2.9.tgz#23963a2a6b9ba2174f7ceee82429a54b921e8980"
+  integrity sha512-g1BnJdJbnAgRUP8YxyPIm8npZVUbtt6VgtLnkGR7poa/RVbVGd27i+9138DmwRvtbKhJG1fPLQ/V3BonvFykRQ==
+
 "@humanfs/core@^0.19.1":
   version "0.19.1"
   resolved "https://registry.yarnpkg.com/@humanfs/core/-/core-0.19.1.tgz#17c55ca7d426733fe3c561906b8173c336b40a77"

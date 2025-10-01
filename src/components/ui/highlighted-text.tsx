@@ -3,12 +3,14 @@ import type { ReactNode } from 'react'
 type HighlightedTextProps = {
   text: string
   className?: string
+  lang?: string
   onHighlightClick?: (word: string) => void
 }
 
 export const HighlightedText = ({
   text,
   className = '',
+  lang,
   onHighlightClick,
 }: HighlightedTextProps) => {
   // 중괄호로 감싸진 텍스트를 찾는 정규식
@@ -56,5 +58,5 @@ export const HighlightedText = ({
     return parts
   }
 
-  return <span className={className}>{renderHighlightedText(text)}</span>
+  return <span className={className} lang={lang}>{renderHighlightedText(text)}</span>
 }

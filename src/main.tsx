@@ -1,3 +1,7 @@
+// @ts-expect-error fontsource types
+import '@fontsource-variable/noto-sans-kr'
+// @ts-expect-error fontsource types
+import '@fontsource-variable/inter'
 import './index.css'
 
 import { StrictMode } from 'react'
