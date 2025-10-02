@@ -13,6 +13,7 @@ import { useIsSentenceUpdated } from '@/stores/is-sentence-updated-store'
 import { useGlobalModal } from '@/stores/modal-store'
 import { useSavedSubtitlesStore } from '@/stores/saved-subtitles-store'
 import { useSubtitleStore } from '@/stores/subtitle-store'
+import type { YouTubeStateChangeDetail, YouTubeTimeUpdateDetail } from '@/types/youtube-events'
 import { timeStringToSeconds } from '@/utils/time'
 
 const WatchPage = () => {
@@ -24,6 +25,7 @@ const WatchPage = () => {
   const [currentTime, setCurrentTime] = useState(0)
 
   const modal = useGlobalModal()
+  // const [play] = useSound(alarmSound)
 
   const {
     setSubtitles,
@@ -40,15 +42,12 @@ const WatchPage = () => {
 
   const currentSubtitle = subtitles[currentIndex]
 
+  const hasCommentary = !!currentSubtitle?.commentary
+
   const savedSubtitle = currentSubtitle
     ? getSavedSubtitle(videoId!, subtitles[currentIndex].id)
     : undefined
   const isSaved = !!savedSubtitle
-
-  const handleTimeUpdate = (time: number) => {
-    setCurrentTime(time)
-    syncWithTime(time)
-  }
 
   const handleTogglePlay = () => {
     if (playerState === 1) {
@@ -130,6 +129,44 @@ const WatchPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentTime, currentIndex, subtitles, playerRef])
 
+  useEffect(() => {
+    if (subtitles.length === 0) return
+    const endTime = timeStringToSeconds(subtitles[currentIndex].endTime)
+
+    if (hasCommentary && currentTime >= endTime) {
+      // play()
+
+      playerRef.current?.pause()
+    }
+  }, [hasCommentary, currentIndex, subtitles, currentTime, playerRef])
+
+  useEffect(() => {
+    const handleTimeUpdate = (event: CustomEvent<YouTubeTimeUpdateDetail>) => {
+      const { currentTime } = event.detail
+
+      setCurrentTime(currentTime)
+      syncWithTime(currentTime)
+    }
+
+    // 상태 변화 이벤트 리스너
+    const handleStateChange = (event: CustomEvent<YouTubeStateChangeDetail>) => {
+      const { state } = event.detail
+
+      setPlayerState(state)
+    }
+
+    // 이벤트 리스너 등록
+    window.addEventListener('onYoutubeTimeUpdate', handleTimeUpdate)
+    window.addEventListener('onYoutubeStateChange', handleStateChange)
+
+    // 클린업
+    return () => {
+      window.removeEventListener('onYoutubeTimeUpdate', handleTimeUpdate)
+      window.removeEventListener('onYoutubeStateChange', handleStateChange)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   if (!videoId) {
     return <div className="p-4">비디오를 찾을 수 없습니다.</div>
   }
@@ -143,15 +180,15 @@ const WatchPage = () => {
           ref={playerRef}
           videoId={videoId}
           initialTime={timeStringToSeconds(subtitles[0]?.startTime || '00:00:00')}
-          onStateChange={setPlayerState}
-          onTimeUpdate={handleTimeUpdate}
+          // onStateChange={setPlayerState}
+          // onTimeUpdate={handleTimeUpdate}
         />
 
         {/* 자막 담기 버튼 */}
         <SaveSubtitleButton
           onClick={handleSaveSubtitle}
           isSaved={isSaved}
-          hasCommentary={!!currentSubtitle?.commentary}
+          // hasCommentary={hasCommentary}
         />
 
         {/* 현재 자막 표시 */}

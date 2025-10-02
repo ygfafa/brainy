@@ -22,8 +22,6 @@ type YouTubePlayerProps = {
   videoId: string
   initialTime?: number
   autoPlay?: boolean
-  onStateChange?: (state: number) => void
-  onTimeUpdate?: (time: number) => void
 }
 
 export type YouTubePlayerRef = {
@@ -36,7 +34,7 @@ export type YouTubePlayerRef = {
 }
 
 export const YouTubePlayer = forwardRef<YouTubePlayerRef, YouTubePlayerProps>(
-  ({ videoId, initialTime, autoPlay = false, onStateChange, onTimeUpdate }, ref) => {
+  ({ videoId, initialTime, autoPlay = false }, ref) => {
     const [showPlayer, setShowPlayer] = useState(false)
     const [isPlayerReady, setIsPlayerReady] = useState(false)
     const playerRef = useRef<YTPlayer | null>(null)
@@ -53,8 +51,14 @@ export const YouTubePlayer = forwardRef<YouTubePlayerRef, YouTubePlayerProps>(
         if (playerRef.current && typeof playerRef.current.getCurrentTime === 'function') {
           const time = playerRef.current.getCurrentTime()
 
-          // 커스텀 시간 변화 이벤트 호출
-          onTimeUpdate?.(time)
+          const timeUpdateEvent = new CustomEvent('onYoutubeTimeUpdate', {
+            detail: {
+              currentTime: time,
+              duration: playerRef.current.getDuration(),
+              videoId,
+            },
+          })
+          window.dispatchEvent(timeUpdateEvent)
         }
       }, 100)
     }
@@ -121,7 +125,16 @@ export const YouTubePlayer = forwardRef<YouTubePlayerRef, YouTubePlayerProps>(
                 stopTimeTracking()
               }
 
-              onStateChange?.(event.data)
+              // window에 플레이어 상태 변화 이벤트 발생
+              const stateChangeEvent = new CustomEvent('onYoutubeStateChange', {
+                detail: {
+                  state: event.data,
+                  videoId,
+                  currentTime: playerRef.current?.getCurrentTime() || 0,
+                  duration: playerRef.current?.getDuration() || 0,
+                },
+              })
+              window.dispatchEvent(stateChangeEvent)
             },
           },
         })
@@ -141,7 +154,7 @@ export const YouTubePlayer = forwardRef<YouTubePlayerRef, YouTubePlayerProps>(
         setShowPlayer(false)
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [videoId, initialTime, autoPlay, onStateChange])
+    }, [videoId, initialTime, autoPlay])
 
     useImperativeHandle(ref, () => ({
       play: () => playerRef.current?.playVideo(),
