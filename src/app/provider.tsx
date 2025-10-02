@@ -6,6 +6,7 @@ import { HelmetProvider } from 'react-helmet-async'
 import { Toaster } from 'sonner'
 
 import { Spinner } from '@/components/ui/spinner'
+import { TooltipProvider } from '@/components/ui/tooltip'
 import { env } from '@/config/env'
 import { queryConfig } from '@/lib/react-query'
 
@@ -54,7 +55,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
                 defaults: '2025-05-24',
               }}
             >
-              {children}
+              <TooltipProvider>{children}</TooltipProvider>
             </PostHogProvider>
           </QueryClientProvider>
         </HelmetProvider>
