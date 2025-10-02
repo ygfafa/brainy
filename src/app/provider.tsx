@@ -5,6 +5,7 @@ import { ErrorBoundary } from 'react-error-boundary'
 import { HelmetProvider } from 'react-helmet-async'
 import { Toaster } from 'sonner'
 
+import { GlobalModal } from '@/components/global-modal'
 import { Spinner } from '@/components/ui/spinner'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { env } from '@/config/env'
@@ -55,7 +56,10 @@ export const AppProvider = ({ children }: AppProviderProps) => {
                 defaults: '2025-05-24',
               }}
             >
-              <TooltipProvider>{children}</TooltipProvider>
+              <TooltipProvider>
+                {children}
+                <GlobalModal />
+              </TooltipProvider>
             </PostHogProvider>
           </QueryClientProvider>
         </HelmetProvider>

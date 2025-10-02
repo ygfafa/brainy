@@ -12,6 +12,7 @@ type ModalProps = {
   open?: boolean
   onOk?(): void
   onCancel?(): void
+  onOpenChange?(open: boolean): void
   okText?: string
   cancelText?: string
   okButtonProps?: ButtonProps
@@ -29,6 +30,7 @@ export const Modal = ({
   open,
   onOk,
   onCancel,
+  onOpenChange,
   classNames,
   okButtonProps,
   cancelButtonProps,
@@ -37,7 +39,7 @@ export const Modal = ({
   cancelText = 'Cancel',
 }: ModalProps) => {
   return (
-    <ModalPrimitive.Root open={open}>
+    <ModalPrimitive.Root open={open} onOpenChange={onOpenChange}>
       <ModalPrimitive.Portal>
         <ModalPrimitive.Overlay className="fixed inset-0 z-50 bg-black/40 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0" />
         <ModalPrimitive.Content
@@ -55,7 +57,9 @@ export const Modal = ({
             </ModalPrimitive.Title>
           )}
           {description && (
-            <ModalPrimitive.Description className={cn('mb-5 text-center', classNames?.description)}>
+            <ModalPrimitive.Description
+              className={cn('mb-5 text-center text-gray-600', classNames?.description)}
+            >
               {description}
             </ModalPrimitive.Description>
           )}
