@@ -53,7 +53,7 @@ const DIFFICULTY_LEVEL: Record<Level, { label: string; color: string }> = {
     label: 'Dễ',
     color: '#008000',
   },
-  medium: {
+  normal: {
     label: 'Trung bình',
     color: '#FFA500',
   },
