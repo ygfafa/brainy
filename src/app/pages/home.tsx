@@ -6,9 +6,12 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { VideoFeed } from '@/components/video-feed'
 import { paths } from '@/config/paths'
 import { videos } from '@/data/videos'
+import { useIsSentenceUpdated } from '@/stores/is-sentence-updated-store'
 
 const HomePage = () => {
   const navigate = useNavigate()
+  const { isSentenceUpdated } = useIsSentenceUpdated()
+
   // const { categories, updateCategoryActive } = useCategories()
 
   // const handleCategoryActive = (data: Category) => {
@@ -18,7 +21,7 @@ const HomePage = () => {
     <Page>
       <PageAppBarWithLogo
         right={
-          <Tooltip open>
+          <Tooltip open={isSentenceUpdated}>
             <TooltipTrigger>
               <div className="p-2" onClick={() => navigate(paths.my.dialogues.getHref())}>
                 <IconShoppingCartStar />

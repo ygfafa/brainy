@@ -1,9 +1,18 @@
+import { useEffect } from 'react'
+
 import { Page, PageAppBarWithBack, PageContent } from '@/components/layout/page'
 import { SavedSubtitleCard } from '@/components/saved-subtitle-card'
+import { useIsSentenceUpdated } from '@/stores/is-sentence-updated-store'
 import { useSavedSubtitlesStore } from '@/stores/saved-subtitles-store'
 
 const MyDialoguesPage = () => {
   const { savedSubtitles } = useSavedSubtitlesStore()
+  const { setIsSentenceUpdated } = useIsSentenceUpdated()
+
+  useEffect(() => {
+    setIsSentenceUpdated(false)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
   return (
     <Page>
       <PageAppBarWithBack title="Câu của tôi" />

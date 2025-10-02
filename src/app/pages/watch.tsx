@@ -8,6 +8,7 @@ import { VideoController } from '@/components/video-controller'
 import { VideoSubtitles } from '@/components/video-subtitles'
 import { YouTubePlayer, type YouTubePlayerRef } from '@/components/youtube-player'
 import { defaultSubtitles, dialogue } from '@/data/dialogue'
+import { useIsSentenceUpdated } from '@/stores/is-sentence-updated-store'
 import { useSavedSubtitlesStore } from '@/stores/saved-subtitles-store'
 import { useSubtitleStore } from '@/stores/subtitle-store'
 import { timeStringToSeconds } from '@/utils/time'
@@ -30,6 +31,7 @@ const WatchPage = () => {
     nextSubtitle,
   } = useSubtitleStore()
   const { addSubtitle, removeSubtitle, getSavedSubtitle } = useSavedSubtitlesStore()
+  const { setIsSentenceUpdated } = useIsSentenceUpdated()
 
   const currentSubtitle = subtitles[currentIndex]
 
@@ -66,8 +68,10 @@ const WatchPage = () => {
   const handleSaveSubtitle = () => {
     if (isSaved && savedSubtitle) {
       removeSubtitle(savedSubtitle.id)
+      setIsSentenceUpdated(false)
     } else {
       addSubtitle(videoId!, currentSubtitle)
+      setIsSentenceUpdated(true)
       toast('자막이 장바구니에 담겼습니다', {
         // action: {
         //   label: '보러가기',
