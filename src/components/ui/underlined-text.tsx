@@ -7,7 +7,12 @@ type UnderlinedTextProps = {
   onUnderlineClick?: () => void
 }
 
-export const UnderlinedText = ({ text, className = '', lang, onUnderlineClick }: UnderlinedTextProps) => {
+export const UnderlinedText = ({
+  text,
+  className = '',
+  lang,
+  onUnderlineClick,
+}: UnderlinedTextProps) => {
   // 중괄호로 감싸진 텍스트를 찾는 정규식
   const highlightRegex = /\{([^}]+)\}/g
 
@@ -26,7 +31,7 @@ export const UnderlinedText = ({ text, className = '', lang, onUnderlineClick }:
       parts.push(
         <span
           key={`underline-${match.index}`}
-          className="underline decoration-2 decoration-blue-500 cursor-pointer hover:decoration-blue-700 hover:text-blue-700 transition-colors duration-200"
+          className="underline decoration-2 decoration-gray-500 cursor-pointer  duration-200"
           onClick={onUnderlineClick}
         >
           {match[1]}
@@ -44,5 +49,9 @@ export const UnderlinedText = ({ text, className = '', lang, onUnderlineClick }:
     return parts
   }
 
-  return <span className={className} lang={lang}>{renderUnderlinedText(text)}</span>
+  return (
+    <span className={className} lang={lang}>
+      {renderUnderlinedText(text)}
+    </span>
+  )
 }
