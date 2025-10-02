@@ -120,7 +120,7 @@ const WatchPage = () => {
           children: '아니오',
         },
         onOk: () => {
-          navigate(paths.my.dialogues.getHref())
+          navigate(paths.my.sentences.getHref())
         },
         onCancel: () => {},
       })

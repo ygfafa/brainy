@@ -1,4 +1,4 @@
-import { IconTrash } from '@tabler/icons-react'
+import { IconChevronDown, IconChevronUp, IconTrash } from '@tabler/icons-react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useState } from 'react'
 
@@ -38,18 +38,21 @@ export const SavedSubtitleCard = ({ savedSubtitle }: SavedSubtitleCardProps) => 
 
   return (
     <div className="bg-white rounded p-4 border border-gray-100">
-      {/* 원문 텍스트 - 중괄호 부분이 underline으로 표시되고 클릭 시 commentary 토글 */}
-      <div className="mb-3">
-        <UnderlinedText
-          text={subtitle.text}
-          className="text-lg font-medium text-gray-900 leading-relaxed"
-          onUnderlineClick={handleUnderlineClick}
-        />
-      </div>
+      <div className="flex items-center mb-2">
+        <div className="flex-1">
+          <UnderlinedText
+            lang="ko"
+            text={subtitle.text}
+            className="font-semibold text-gray-900 mb-1"
+          />
+          <p className="text-sm text-gray-600 leading-relaxed">{subtitle.translation}</p>
+        </div>
 
-      {/* 번역 텍스트 */}
-      <div className="mb-4">
-        <p className="text-sm text-gray-600 leading-relaxed">{subtitle.translation}</p>
+        {subtitle.commentary && (
+          <button onClick={handleUnderlineClick}>
+            {isCommentaryOpen ? <IconChevronUp /> : <IconChevronDown />}
+          </button>
+        )}
       </div>
 
       {/* Commentary 아코디언 - UnderlinedText 클릭으로 토글됨 */}

@@ -23,7 +23,7 @@ const HomePage = () => {
         right={
           <Tooltip open={isSentenceUpdated}>
             <TooltipTrigger>
-              <div className="p-2" onClick={() => navigate(paths.my.dialogues.getHref())}>
+              <div className="p-2" onClick={() => navigate(paths.my.sentences.getHref())}>
                 <IconShoppingCartStar />
               </div>
             </TooltipTrigger>

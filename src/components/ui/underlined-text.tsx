@@ -31,7 +31,7 @@ export const UnderlinedText = ({
       parts.push(
         <span
           key={`underline-${match.index}`}
-          className="underline decoration-2 decoration-gray-500 cursor-pointer  duration-200"
+          className="underline underline-offset-[6px] decoration-gray-600"
           onClick={onUnderlineClick}
         >
           {match[1]}

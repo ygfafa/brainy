@@ -5,7 +5,7 @@ import { SavedSubtitleCard } from '@/components/saved-subtitle-card'
 import { useIsSentenceUpdated } from '@/stores/is-sentence-updated-store'
 import { useSavedSubtitlesStore } from '@/stores/saved-subtitles-store'
 
-const MyDialoguesPage = () => {
+const MySentencesPage = () => {
   const { savedSubtitles } = useSavedSubtitlesStore()
   const { setIsSentenceUpdated } = useIsSentenceUpdated()
 
@@ -34,4 +34,4 @@ const MyDialoguesPage = () => {
   )
 }
 
-export default MyDialoguesPage
+export default MySentencesPage

@@ -8,9 +8,9 @@ export const paths = {
     getHref: (videoId: string) => `/watch/${videoId}`,
   },
   my: {
-    dialogues: {
-      path: '/my/dialogues',
-      getHref: () => '/my/dialogues',
+    sentences: {
+      path: '/my/sentences',
+      getHref: () => '/my/sentences',
     },
   },
   auth: {
