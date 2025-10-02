@@ -110,7 +110,7 @@ const WatchPage = () => {
 
   return (
     <Page>
-      <PageAppBarWithBack title="대사 골라 담기" />
+      <PageAppBarWithBack title="Chọn câu thoại để lưu" />
       <PageContent noSidePadding>
         <YouTubePlayer
           // autoPlay
