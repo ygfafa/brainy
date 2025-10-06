@@ -39,7 +39,8 @@ type PageAppBarWithLogoProps = {
 export const PageAppBarWithLogo = ({ right }: PageAppBarWithLogoProps) => {
   return (
     <PageAppBarWrapper className="justify-between pr-2 h-full">
-      <h1 className="text-lg font-bold">Logo</h1>
+      <h1 className="text-lg font-bold"></h1>
+      {/* <h1 className="text-lg font-bold">Logo</h1> */}
       {right}
     </PageAppBarWrapper>
   )
