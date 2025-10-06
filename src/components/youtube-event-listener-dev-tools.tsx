@@ -24,7 +24,7 @@ export const YouTubeEventListenerDevTools = () => {
   useEffect(() => {
     // 시간 업데이트 이벤트 리스너
     const handleTimeUpdate = (event: CustomEvent<YouTubeTimeUpdateDetail>) => {
-      const { currentTime, duration, videoId } = event.detail
+      const { currentTime, duration } = event.detail
       setTimeInfo(event.detail)
 
       // 1초마다 로그 (너무 많은 로그 방지)
@@ -35,7 +35,7 @@ export const YouTubeEventListenerDevTools = () => {
 
     // 상태 변화 이벤트 리스너
     const handleStateChange = (event: CustomEvent<YouTubeStateChangeDetail>) => {
-      const { state, videoId, currentTime } = event.detail
+      const { state, videoId } = event.detail
       setStateInfo(event.detail)
 
       const stateText = getPlayerStateText(state)

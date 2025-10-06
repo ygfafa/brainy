@@ -76,7 +76,7 @@ const WatchPage = () => {
     } else {
       addSubtitle(videoId!, currentSubtitle)
       setIsSentenceUpdated(true)
-      toast('자막이 장바구니에 담겼습니다', {
+      toast('Đã lưu câu vào thư viện', {
         // action: {
         //   label: '보러가기',
         //   onClick: () => navigate('/saved-subtitles'),
