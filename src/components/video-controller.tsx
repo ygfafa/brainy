@@ -10,8 +10,6 @@ import {
 type VideoControllerProps = {
   isPlaying: boolean
   isRepeatMode: boolean
-  hasPrevSubtitle: boolean
-  hasNextSubtitle: boolean
   onPrevious: () => void
   onNext: () => void
   togglePlay: () => void
@@ -25,8 +23,6 @@ export const VideoController = ({
   onPrevious,
   onNext,
   toggleRepeat,
-  hasPrevSubtitle,
-  hasNextSubtitle,
 }: VideoControllerProps) => {
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 shadow-lg z-50">
@@ -44,7 +40,7 @@ export const VideoController = ({
             {/* 이전 자막 버튼 */}
             <button
               onClick={onPrevious}
-              disabled={!hasPrevSubtitle}
+              // disabled={!hasPrevSubtitle}
               className="p-2 disabled:opacity-50"
             >
               <IconPlayerSkipBackFilled />
@@ -58,7 +54,7 @@ export const VideoController = ({
             {/* 다음 자막 버튼 */}
             <button
               onClick={onNext}
-              disabled={!hasNextSubtitle}
+              // disabled={!hasNextSubtitle}
               className="p-2 disabled:opacity-50"
             >
               <IconPlayerSkipForwardFilled />

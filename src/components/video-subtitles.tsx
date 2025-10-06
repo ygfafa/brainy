@@ -4,7 +4,7 @@ import { CommentaryMarkdown } from './commentary-markdown'
 import { HighlightedText } from './ui/highlighted-text'
 
 type VideoSubtitlesProps = {
-  data: Dialogue
+  data?: Dialogue
 }
 export const VideoSubtitles = ({ data }: VideoSubtitlesProps) => {
   if (!data) return null

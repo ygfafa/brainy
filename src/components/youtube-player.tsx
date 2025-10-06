@@ -22,6 +22,7 @@ type YouTubePlayerProps = {
   videoId: string
   initialTime?: number
   autoPlay?: boolean
+  onStateChange: (state: number) => void
 }
 
 export type YouTubePlayerRef = {
@@ -34,41 +35,11 @@ export type YouTubePlayerRef = {
 }
 
 export const YouTubePlayer = forwardRef<YouTubePlayerRef, YouTubePlayerProps>(
-  ({ videoId, initialTime, autoPlay = false }, ref) => {
+  ({ videoId, initialTime, autoPlay = false, onStateChange }, ref) => {
     const [showPlayer, setShowPlayer] = useState(false)
     const [isPlayerReady, setIsPlayerReady] = useState(false)
     const playerRef = useRef<YTPlayer | null>(null)
     const containerRef = useRef<HTMLDivElement>(null)
-    const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
-
-    const startTimeTracking = () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current)
-      }
-
-      // 100ms마다 현재 시간 업데이트 (더 부드러운 추적)
-      intervalRef.current = setInterval(() => {
-        if (playerRef.current && typeof playerRef.current.getCurrentTime === 'function') {
-          const time = playerRef.current.getCurrentTime()
-
-          const timeUpdateEvent = new CustomEvent('onYoutubeTimeUpdate', {
-            detail: {
-              currentTime: time,
-              duration: playerRef.current.getDuration(),
-              videoId,
-            },
-          })
-          window.dispatchEvent(timeUpdateEvent)
-        }
-      }, 100)
-    }
-
-    const stopTimeTracking = () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current)
-        intervalRef.current = null
-      }
-    }
 
     // 플레이어가 준비되면 자동으로 표시
     useEffect(() => {
@@ -117,24 +88,7 @@ export const YouTubePlayer = forwardRef<YouTubePlayerRef, YouTubePlayerProps>(
               setIsPlayerReady(true)
             },
             onStateChange: event => {
-              // 재생 중일 때만 시간 추적 시작
-              if (event.data === 1) {
-                // playing
-                startTimeTracking()
-              } else {
-                stopTimeTracking()
-              }
-
-              // window에 플레이어 상태 변화 이벤트 발생
-              const stateChangeEvent = new CustomEvent('onYoutubeStateChange', {
-                detail: {
-                  state: event.data,
-                  videoId,
-                  currentTime: playerRef.current?.getCurrentTime() || 0,
-                  duration: playerRef.current?.getDuration() || 0,
-                },
-              })
-              window.dispatchEvent(stateChangeEvent)
+              onStateChange?.(event.data)
             },
           },
         })
@@ -148,7 +102,7 @@ export const YouTubePlayer = forwardRef<YouTubePlayerRef, YouTubePlayerProps>(
       }
 
       return () => {
-        stopTimeTracking()
+        // stopTimeTracking()
         playerRef.current?.destroy()
         setIsPlayerReady(false)
         setShowPlayer(false)

@@ -8,46 +8,42 @@ import { VideoController } from '@/components/video-controller'
 import { VideoSubtitles } from '@/components/video-subtitles'
 import { YouTubePlayer, type YouTubePlayerRef } from '@/components/youtube-player'
 import { paths } from '@/config/paths'
-import { defaultSubtitles, dialogue } from '@/data/dialogue'
+import { dialogue } from '@/data/dialogue'
 import { useIsSentenceUpdated } from '@/stores/is-sentence-updated-store'
 import { useGlobalModal } from '@/stores/modal-store'
 import { useSavedSubtitlesStore } from '@/stores/saved-subtitles-store'
-import { useSubtitleStore } from '@/stores/subtitle-store'
-import type { YouTubeStateChangeDetail, YouTubeTimeUpdateDetail } from '@/types/youtube-events'
+import type { Dialogue } from '@/types/youtube'
 import { timeStringToSeconds } from '@/utils/time'
 
 const WatchPage = () => {
   const { videoId } = useParams<{ videoId: string }>()
+
+  const dialogues = getCurrentDialogue(videoId!)
+
+  const [currentDialogue, setCurrentDialogue] = useState<Dialogue>(dialogues[0])
+  const [isRepeatMode, setIsRepeatMode] = useState(false)
+
   const navigate = useNavigate()
-  // const [searchParams] = useSearchParams()
   const playerRef = useRef<YouTubePlayerRef>(null)
   const [playerState, setPlayerState] = useState(-1)
-  const [currentTime, setCurrentTime] = useState(0)
+
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  // isRepeatMode의 최신 값을 참조하기 위한 ref
+  const isRepeatModeRef = useRef(isRepeatMode)
 
   const modal = useGlobalModal()
-  // const [play] = useSound(alarmSound)
 
-  const {
-    setSubtitles,
-    subtitles,
-    currentIndex,
-    syncWithTime,
-    isRepeatMode,
-    toggleRepeatMode,
-    prevSubtitle,
-    nextSubtitle,
-  } = useSubtitleStore()
   const { addSubtitle, removeSubtitle, getSavedSubtitle } = useSavedSubtitlesStore()
   const { setIsSentenceUpdated } = useIsSentenceUpdated()
 
-  const currentSubtitle = subtitles[currentIndex]
+  const savedSubtitle = currentDialogue ? getSavedSubtitle(videoId!, currentDialogue.id) : undefined
 
-  const hasCommentary = !!currentSubtitle?.commentary
-
-  const savedSubtitle = currentSubtitle
-    ? getSavedSubtitle(videoId!, subtitles[currentIndex].id)
-    : undefined
   const isSaved = !!savedSubtitle
+
+  // isRepeatMode 상태가 변경될 때마다 ref 동기화
+  useEffect(() => {
+    isRepeatModeRef.current = isRepeatMode
+  }, [isRepeatMode])
 
   const handleTogglePlay = () => {
     if (playerState === 1) {
@@ -58,15 +54,44 @@ const WatchPage = () => {
   }
 
   const handleToggleRepeat = () => {
-    toggleRepeatMode()
+    setIsRepeatMode(prev => {
+      const newValue = !prev
+      // ref도 함께 업데이트
+      isRepeatModeRef.current = newValue
+      return newValue
+    })
   }
 
   const handlePrevious = () => {
-    prevSubtitle(playerRef.current)
+    const currentIndex = dialogues.findIndex(d => d.id === currentDialogue?.id)
+    const prevIndex = currentIndex - 1
+    const prevDialogue = dialogues[prevIndex]
+
+    // 이전 다이얼로그가 없음
+    if (!prevDialogue) {
+      return
+    }
+
+    if (playerRef) {
+      setCurrentDialogue(prevDialogue)
+      playerRef.current?.seekTo(timeStringToSeconds(prevDialogue.startTime))
+    }
   }
 
   const handleNext = () => {
-    nextSubtitle(playerRef.current)
+    const currentIndex = dialogues.findIndex(d => d.id === currentDialogue?.id)
+    const nextIndex = currentIndex + 1
+    const nextDialogue = dialogues[nextIndex]
+
+    // 다음 다이얼로그가 없음
+    if (!nextDialogue) {
+      return
+    }
+
+    if (playerRef) {
+      setCurrentDialogue(nextDialogue)
+      playerRef.current?.seekTo(timeStringToSeconds(nextDialogue.startTime))
+    }
   }
 
   const handleSaveSubtitle = () => {
@@ -74,101 +99,112 @@ const WatchPage = () => {
       removeSubtitle(savedSubtitle.id)
       setIsSentenceUpdated(false)
     } else {
-      addSubtitle(videoId!, currentSubtitle)
+      addSubtitle(videoId!, currentDialogue!)
       setIsSentenceUpdated(true)
-      toast('Đã lưu câu vào thư viện', {
-        // action: {
-        //   label: '보러가기',
-        //   onClick: () => navigate('/saved-subtitles'),
-        // },
-      })
+      toast('Đã lưu câu vào thư viện')
     }
   }
 
-  useEffect(() => {
-    if (videoId) {
-      const videoSubtitles = dialogue[videoId] || defaultSubtitles
-      setSubtitles(videoSubtitles)
-    }
-  }, [videoId, setSubtitles])
+  // useEffect(() => {
+  //   if (subtitles.length === 0) return
+  //   const endTime = timeStringToSeconds(subtitles[currentIndex].endTime)
 
-  useEffect(() => {
-    if (isRepeatMode) {
-      const endTime = timeStringToSeconds(subtitles[currentIndex].endTime)
-      if (currentTime >= endTime) {
-        playerRef.current?.seekTo(timeStringToSeconds(subtitles[currentIndex].startTime))
+  //   if (hasCommentary && currentTime >= endTime) {
+  //     // play()
+
+  //     playerRef.current?.pause()
+  //   }
+  // }, [hasCommentary, currentIndex, subtitles, currentTime, playerRef])
+
+  const handleDialogueEnded = () => {
+    playerRef.current?.pause()
+
+    modal.open({
+      title: 'Xem xong video rồi!',
+      description: 'Bạn có muốn xem thư viện không?',
+      okButtonProps: {
+        children: 'Có',
+      },
+      cancelButtonProps: {
+        children: 'Không',
+      },
+      onOk: () => {
+        navigate(paths.my.sentences.getHref())
+      },
+      onCancel: () => {},
+    })
+  }
+
+  const handleRepeatMode = (time: number) => {
+    const endTime = timeStringToSeconds(currentDialogue.endTime)
+
+    if (time >= endTime) {
+      playerRef.current?.seekTo(timeStringToSeconds(currentDialogue.startTime))
+      setCurrentDialogue(currentDialogue)
+    }
+  }
+
+  const startTimeTracking = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current)
+    }
+
+    // 100ms마다 현재 시간 업데이트 (더 부드러운 추적)
+    intervalRef.current = setInterval(() => {
+      if (playerRef.current) {
+        const time = playerRef.current.getCurrentTime()
+
+        console.log('isToggleRepeat', isRepeatModeRef.current)
+
+        if (isDialogueEnded(time, dialogues)) {
+          handleDialogueEnded()
+          return
+        }
+
+        const isRepeatMode = isRepeatModeRef.current
+
+        if (isRepeatMode) {
+          handleRepeatMode(time)
+          return
+        }
+
+        const 시간에따른다이얼로그 = dialogues.find(d => {
+          return time >= timeStringToSeconds(d.startTime) && time < timeStringToSeconds(d.endTime)
+        })
+
+        if (!시간에따른다이얼로그) {
+          return
+        }
+
+        setCurrentDialogue(시간에따른다이얼로그)
+
+        // 반복 모드일 때 현재 다이얼로그 끝에서 다시 시작
       }
+    }, 200)
+  }
+
+  const stopTimeTracking = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current)
+      intervalRef.current = null
     }
-  }, [currentTime, isRepeatMode, syncWithTime, currentIndex, subtitles, playerRef])
+  }
 
-  useEffect(() => {
-    if (subtitles.length === 0) return
+  const handleStateChange = (state: number) => {
+    const isPlaying = state === 1
 
-    const endTime = timeStringToSeconds(subtitles[currentIndex].endTime)
-    const isLastSubtitle = currentIndex === subtitles.length - 1
-    if (isLastSubtitle && currentTime >= endTime) {
-      playerRef.current?.pause()
+    setPlayerState(state)
 
-      modal.open({
-        title: 'Xem xong video rồi!',
-        description: 'Bạn có muốn xem thư viện không?',
-        okButtonProps: {
-          children: '네',
-        },
-        cancelButtonProps: {
-          children: '아니오',
-        },
-        onOk: () => {
-          navigate(paths.my.sentences.getHref())
-        },
-        onCancel: () => {},
-      })
+    if (isPlaying) {
+      startTimeTracking()
 
       return
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentTime, currentIndex, subtitles, playerRef])
-
-  useEffect(() => {
-    if (subtitles.length === 0) return
-    const endTime = timeStringToSeconds(subtitles[currentIndex].endTime)
-
-    if (hasCommentary && currentTime >= endTime) {
-      // play()
-
-      playerRef.current?.pause()
-    }
-  }, [hasCommentary, currentIndex, subtitles, currentTime, playerRef])
-
-  useEffect(() => {
-    const handleTimeUpdate = (event: CustomEvent<YouTubeTimeUpdateDetail>) => {
-      const { currentTime } = event.detail
-
-      setCurrentTime(currentTime)
-      syncWithTime(currentTime)
-    }
-
-    // 상태 변화 이벤트 리스너
-    const handleStateChange = (event: CustomEvent<YouTubeStateChangeDetail>) => {
-      const { state } = event.detail
-
-      setPlayerState(state)
-    }
-
-    // 이벤트 리스너 등록
-    window.addEventListener('onYoutubeTimeUpdate', handleTimeUpdate)
-    window.addEventListener('onYoutubeStateChange', handleStateChange)
-
-    // 클린업
-    return () => {
-      window.removeEventListener('onYoutubeTimeUpdate', handleTimeUpdate)
-      window.removeEventListener('onYoutubeStateChange', handleStateChange)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    stopTimeTracking()
+  }
 
   if (!videoId) {
-    return <div className="p-4">비디오를 찾을 수 없습니다.</div>
+    return <div className="p-4">Không tìm thấy video.</div>
   }
 
   return (
@@ -176,28 +212,21 @@ const WatchPage = () => {
       <PageAppBarWithBack title="Chọn câu thoại để lưu" />
       <PageContent noSidePadding>
         <YouTubePlayer
-          // autoPlay
+          onStateChange={handleStateChange}
           ref={playerRef}
           videoId={videoId}
-          initialTime={timeStringToSeconds(subtitles[0]?.startTime || '00:00:00')}
-          // onStateChange={setPlayerState}
-          // onTimeUpdate={handleTimeUpdate}
+          initialTime={timeStringToSeconds(dialogues[0]?.startTime || '00:00:00')}
         />
 
         {/* 자막 담기 버튼 */}
-        <SaveSubtitleButton
-          onClick={handleSaveSubtitle}
-          isSaved={isSaved}
-          // hasCommentary={hasCommentary}
-        />
+        <SaveSubtitleButton onClick={handleSaveSubtitle} isSaved={isSaved} />
 
         {/* 현재 자막 표시 */}
-        <VideoSubtitles data={currentSubtitle} />
+        {currentDialogue && <VideoSubtitles data={currentDialogue} />}
+
         <VideoController
           isPlaying={playerState === 1}
           isRepeatMode={isRepeatMode}
-          hasPrevSubtitle={currentIndex > 0}
-          hasNextSubtitle={currentIndex < subtitles.length - 1}
           togglePlay={handleTogglePlay}
           onPrevious={handlePrevious}
           onNext={handleNext}
@@ -206,6 +235,15 @@ const WatchPage = () => {
       </PageContent>
     </Page>
   )
+}
+
+const isDialogueEnded = (time: number, dialogues: Dialogue[]) => {
+  const lastDialogue = dialogues[dialogues.length - 1]
+  return time >= timeStringToSeconds(lastDialogue.endTime)
+}
+
+const getCurrentDialogue = (videoId: string) => {
+  return dialogue[videoId]
 }
 
 export default WatchPage
