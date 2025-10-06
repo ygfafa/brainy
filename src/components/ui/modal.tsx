@@ -35,8 +35,8 @@ export const Modal = ({
   okButtonProps,
   cancelButtonProps,
   hideCancelButton = false,
-  okText = 'Confirm',
-  cancelText = 'Cancel',
+  okText = 'Xác nhận',
+  cancelText = 'Hủy',
 }: ModalProps) => {
   return (
     <ModalPrimitive.Root open={open} onOpenChange={onOpenChange}>

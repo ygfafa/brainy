@@ -33,8 +33,8 @@ type ModalStore = ModalState & ModalActions
 const initialConfig: ModalConfig = {
   title: '',
   description: '',
-  okText: 'Confirm',
-  cancelText: 'Cancel',
+  okText: 'Xác nhận',
+  cancelText: 'Hủy',
   hideCancelButton: false,
 }
 
