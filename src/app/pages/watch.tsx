@@ -13,7 +13,7 @@ import { useIsSentenceUpdated } from '@/stores/is-sentence-updated-store'
 import { useGlobalModal } from '@/stores/modal-store'
 import { useSavedSubtitlesStore } from '@/stores/saved-subtitles-store'
 import type { Dialogue } from '@/types/youtube'
-import { timeStringToSeconds } from '@/utils/time'
+import { timeCodeToSeconds } from '@/utils/time'
 
 const WatchPage = () => {
   const { videoId } = useParams<{ videoId: string }>()
@@ -74,7 +74,7 @@ const WatchPage = () => {
 
     if (playerRef) {
       setCurrentDialogue(prevDialogue)
-      playerRef.current?.seekTo(timeStringToSeconds(prevDialogue.startTime))
+      playerRef.current?.seekTo(timeCodeToSeconds(prevDialogue.startTime))
     }
   }
 
@@ -90,7 +90,7 @@ const WatchPage = () => {
 
     if (playerRef) {
       setCurrentDialogue(nextDialogue)
-      playerRef.current?.seekTo(timeStringToSeconds(nextDialogue.startTime))
+      playerRef.current?.seekTo(timeCodeToSeconds(nextDialogue.startTime))
     }
   }
 
@@ -107,7 +107,7 @@ const WatchPage = () => {
 
   // useEffect(() => {
   //   if (subtitles.length === 0) return
-  //   const endTime = timeStringToSeconds(subtitles[currentIndex].endTime)
+  //   const endTime = timeCodeToSeconds(subtitles[currentIndex].endTime)
 
   //   if (hasCommentary && currentTime >= endTime) {
   //     // play()
@@ -136,10 +136,10 @@ const WatchPage = () => {
   }
 
   const handleRepeatMode = (time: number) => {
-    const endTime = timeStringToSeconds(currentDialogue.endTime)
+    const endTime = timeCodeToSeconds(currentDialogue.endTime)
 
     if (time >= endTime) {
-      playerRef.current?.seekTo(timeStringToSeconds(currentDialogue.startTime))
+      playerRef.current?.seekTo(timeCodeToSeconds(currentDialogue.startTime))
       setCurrentDialogue(currentDialogue)
     }
   }
@@ -154,8 +154,6 @@ const WatchPage = () => {
       if (playerRef.current) {
         const time = playerRef.current.getCurrentTime()
 
-        console.log('isToggleRepeat', isRepeatModeRef.current)
-
         if (isDialogueEnded(time, dialogues)) {
           handleDialogueEnded()
           return
@@ -169,7 +167,7 @@ const WatchPage = () => {
         }
 
         const 시간에따른다이얼로그 = dialogues.find(d => {
-          return time >= timeStringToSeconds(d.startTime) && time < timeStringToSeconds(d.endTime)
+          return time >= timeCodeToSeconds(d.startTime) && time < timeCodeToSeconds(d.endTime)
         })
 
         if (!시간에따른다이얼로그) {
@@ -210,12 +208,20 @@ const WatchPage = () => {
   return (
     <Page>
       <PageAppBarWithBack title="Chọn câu thoại để lưu" />
+
+      {/* <Button
+        onClick={() => {
+          playerRef.current?.seekTo(1047)
+        }}
+      >
+        zz
+      </Button> */}
       <PageContent noSidePadding>
         <YouTubePlayer
           onStateChange={handleStateChange}
           ref={playerRef}
           videoId={videoId}
-          initialTime={timeStringToSeconds(dialogues[0]?.startTime || '00:00:00')}
+          initialTime={timeCodeToSeconds(dialogues[0].startTime)}
         />
 
         {/* 자막 담기 버튼 */}
@@ -239,7 +245,7 @@ const WatchPage = () => {
 
 const isDialogueEnded = (time: number, dialogues: Dialogue[]) => {
   const lastDialogue = dialogues[dialogues.length - 1]
-  return time >= timeStringToSeconds(lastDialogue.endTime)
+  return time >= timeCodeToSeconds(lastDialogue.endTime)
 }
 
 const getCurrentDialogue = (videoId: string) => {

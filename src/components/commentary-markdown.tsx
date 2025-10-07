@@ -20,7 +20,7 @@ export const CommentaryMarkdown = ({ content, className = '' }: CommentaryMarkdo
     },
     p: ({ children }) => {
       // 문단 사이 여백 처리
-      return <p className="text-gray-700 leading-relaxed mb-4">{children}zzz</p>
+      return <p className="text-gray-700 leading-relaxed mb-4">{children}</p>
     },
   }
 

@@ -111,7 +111,6 @@ export const YouTubePlayer = forwardRef<YouTubePlayerRef, YouTubePlayerProps>(
       try {
         await loadYouTubeAPI()
 
-        console.log(initialTime)
         playerRef.current = new window.YT.Player(containerRef.current.id, {
           videoId,
           playerVars: {
@@ -152,8 +151,6 @@ export const YouTubePlayer = forwardRef<YouTubePlayerRef, YouTubePlayerProps>(
             },
           },
         })
-
-        console.log('## v2', playerRef.current)
       } catch (err) {
         const errorMessage = err instanceof Error ? err.message : 'Failed to initialize player'
         setError(errorMessage)
@@ -209,7 +206,6 @@ export const YouTubePlayer = forwardRef<YouTubePlayerRef, YouTubePlayerProps>(
           return
         }
 
-        console.log(playerRef.current)
         playerRef.current.playVideo()
       },
       pause: () => {

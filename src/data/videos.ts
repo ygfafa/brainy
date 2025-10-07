@@ -3,7 +3,7 @@ import type { Video } from '@/types/youtube'
 export const videos: Video[] = [
   {
     videoId: 'cW9D6_g6MR0',
-    thumbnail: 'https://img.youtube.com/vi/uHHIZ4I-DNY/hqdefault.jpg',
+    thumbnail: 'https://img.youtube.com/vi/cW9D6_g6MR0/hqdefault.jpg',
     title: '1시간 걸렸어',
     description: 'Mất một tiếng rồi.',
     level: 'easy',
